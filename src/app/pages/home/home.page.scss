@@ -1,0 +1,36 @@
+.country-card {
+    height: 160px;
+    width: 100%;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    vertical-align: middle;
+}
+
+.country-card.copenhagen {
+    background-image: url(../../../assets/img/copenhagen.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.8;
+}
+
+.page-header {
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+ion-card-header {
+    margin-top: 40px;
+    color: white;
+    font-weight: bold;
+    font-size: large;
+    padding: 5px;
+}
+
+ion-card-subtitle {
+    color: white;
+    font-weight: bolder;
+    font-size: small;
+}
+
+
