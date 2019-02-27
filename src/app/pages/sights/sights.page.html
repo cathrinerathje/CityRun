@@ -10,7 +10,7 @@
 <ion-content padding>
   <ion-list>
     <ion-item>
-      <ion-checkbox (click)="checkSight($event)"></ion-checkbox>
+      <ion-checkbox id="0" (click)="checkSight($event, 0)"></ion-checkbox>
       <ion-label>
         <h3>Amalienborg</h3>
         <p>bla bla bla</p>
@@ -18,7 +18,7 @@
       <ion-button item-end fill="clear" color="primary">View</ion-button>
     </ion-item>
     <ion-item>
-      <ion-checkbox (click)="checkSight($event)"></ion-checkbox>
+      <ion-checkbox id="1" (click)="checkSight($event, 1)"></ion-checkbox>
       <ion-label>
         <h3>Amalienborg</h3>
         <p>bla bla bla</p>
@@ -26,7 +26,7 @@
       <ion-button item-end fill="clear" color="primary">View</ion-button>
     </ion-item>
     <ion-item>
-      <ion-checkbox (click)="checkSight($event)"></ion-checkbox>
+      <ion-checkbox id="2" (click)="checkSight($event, 2)"></ion-checkbox>
       <ion-label>
         <h3>Amalienborg</h3>
         <p>bla bla bla</p>
@@ -35,6 +35,6 @@
     </ion-item>
   </ion-list>
 
-  <ion-button [disabled]="!sightChecked" color="secondary" class="generate-button">Generate</ion-button>
+  <ion-button (click)="navigateToOverviewPage()" [disabled]="!sightChecked" color="secondary" class="generate-button">Generate</ion-button>
 
 </ion-content>
