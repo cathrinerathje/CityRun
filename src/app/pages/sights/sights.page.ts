@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NumericValueAccessor, NavController } from '@ionic/angular';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
+import { NavProviderService } from '../../providers/nav/nav-provider.service';
 
 
 class Sight{
@@ -33,7 +32,7 @@ export class SightsPage implements OnInit {
 
   data: any;
 
-  constructor(private router: Router, public navCtrl: NavController) { 
+  constructor(private router: Router, public navCtrl: NavProviderService) { 
     this.numberOfSightsChecked = 0;
     this.sights = [];
     this.sights.push(new Sight('Kastellet', 55.690460, 12.595370));
@@ -71,14 +70,11 @@ export class SightsPage implements OnInit {
     selectedSights = this.sights.filter(sight => sight.checked == true);
     console.log("true sights: " + selectedSights.length);
 
-    //this.navCtrl.push()
+    this.navCtrl.push('overview', selectedSights); 
 
-    this.router.navigateByUrl('/overview');
+  
   }
 
-  push(url: string, data: any){
-    this.data = data;
 
-  }
 
 }
