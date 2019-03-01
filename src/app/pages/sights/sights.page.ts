@@ -1,5 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NumericValueAccessor, NavController } from '@ionic/angular';
+import { analyzeAndValidateNgModules } from '@angular/compiler';
+
+
+class Sight{
+  name: string;
+  checked: boolean; 
+  lat: number;
+  lng: number;
+
+  constructor(name: string, lat: number, lng: number){
+    this.checked = false;
+    this.name = name;
+    this.lat = lat;
+    this.lng = lng;
+  }
+}
+
 
 @Component({
   selector: 'app-sights',
@@ -9,27 +27,37 @@ import { Router } from '@angular/router';
 export class SightsPage implements OnInit {
   sightChecked: boolean;
   numberOfSightsChecked: number;
-  selectedSights = [3];
 
-  constructor(private router: Router) { 
-    this.sightChecked = false;
+  //Array of sights
+  sights: Array<Sight>;
+
+  data: any;
+
+  constructor(private router: Router, public navCtrl: NavController) { 
     this.numberOfSightsChecked = 0;
+    this.sights = [];
+    this.sights.push(new Sight('Kastellet', 55.690460, 12.595370));
+    this.sights.push(new Sight('Amalienborg', 55.694510, 12.594650));
+    this.sights.push(new Sight('Vor Frelser Kirke', 55.672791, 12.594050));
+
+    
   }
 
   ngOnInit() {
   }
 
-  checkSight(event: any, id: number) {
-    console.log('id :' + id);
-    console.log('array :' + this.selectedSights.toString());
+  checkSight(event: any, sight: Sight) {
+    console.log("status: " + sight.checked);
     if (event.target.checked) {
       this.numberOfSightsChecked--;
-      this.selectedSights.splice(id, 1);
-      console.log('array :' + this.selectedSights.toString());
+      sight.checked = false;
+      console.log("status: " + sight.checked);
+    
     } else {
       this.numberOfSightsChecked++;
-      this.selectedSights.splice(id, 1, id);
-      console.log('array :' + this.selectedSights.toString());
+      sight.checked = true;
+      console.log("status: " + sight.checked);
+      
     }
     if (this.numberOfSightsChecked === 0) {
       this.sightChecked = false;
@@ -39,7 +67,18 @@ export class SightsPage implements OnInit {
   }
 
   navigateToOverviewPage() {
+    let selectedSights = [];
+    selectedSights = this.sights.filter(sight => sight.checked == true);
+    console.log("true sights: " + selectedSights.length);
+
+    //this.navCtrl.push()
+
     this.router.navigateByUrl('/overview');
+  }
+
+  push(url: string, data: any){
+    this.data = data;
+
   }
 
 }

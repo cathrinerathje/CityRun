@@ -9,26 +9,10 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item>
-      <ion-checkbox id="0" (click)="checkSight($event, 0)"></ion-checkbox>
+    <ion-item *ngFor="let sight of sights">
+      <ion-checkbox (click)="checkSight($event, sight)"></ion-checkbox>
       <ion-label>
-        <h3>Amalienborg</h3>
-        <p>bla bla bla</p>
-      </ion-label>
-      <ion-button item-end fill="clear" color="primary">View</ion-button>
-    </ion-item>
-    <ion-item>
-      <ion-checkbox id="1" (click)="checkSight($event, 1)"></ion-checkbox>
-      <ion-label>
-        <h3>Kastellet</h3>
-        <p>bla bla bla</p>
-      </ion-label>
-      <ion-button item-end fill="clear" color="primary">View</ion-button>
-    </ion-item>
-    <ion-item>
-      <ion-checkbox id="2" (click)="checkSight($event, 2)"></ion-checkbox>
-      <ion-label>
-        <h3>Den Lille Havfrue</h3>
+        <h3>{{sight.name}}</h3>
         <p>bla bla bla</p>
       </ion-label>
       <ion-button item-end fill="clear" color="primary">View</ion-button>
