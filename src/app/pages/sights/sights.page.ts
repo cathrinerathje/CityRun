@@ -36,8 +36,10 @@ export class SightsPage implements OnInit {
     this.numberOfSightsChecked = 0;
     this.sights = [];
     this.sights.push(new Sight('Kastellet', 55.690460, 12.595370));
-    this.sights.push(new Sight('Amalienborg', 55.694510, 12.594650));
-    this.sights.push(new Sight('Vor Frelser Kirke', 55.672791, 12.594050));
+    this.sights.push(new Sight('Amalienborg', 55.684440, 12.592430));
+    this.sights.push(new Sight('Vor Frelser Kirke', 55.672790, 12.594050));
+    this.sights.push(new Sight('Storkespringvandet', 55.678950, 12.579040));
+    this.sights.push(new Sight('Marmor Kirken', 55.685060, 12.589260));
 
     
   }

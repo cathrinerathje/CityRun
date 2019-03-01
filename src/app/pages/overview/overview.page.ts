@@ -3,11 +3,23 @@ import { NavProviderService } from '../../providers/nav/nav-provider.service';
 
 declare var google: any;
 
+class Waypoint {
+  location: string;
+  stopover: boolean;
+
+  constructor(location: string){
+    this.location = location;
+    this.stopover = true;
+  }
+}
+
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.page.html',
   styleUrls: ['./overview.page.scss'],
 })
+
+
 export class OverviewPage implements OnInit {
 
   sights: any; 
@@ -25,6 +37,7 @@ export class OverviewPage implements OnInit {
 
   ngOnInit() {
     this.loadMap();
+    this.startNavigation();
   }
 
   loadMap(){
@@ -38,6 +51,43 @@ export class OverviewPage implements OnInit {
     }
 
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+  }
+
+  
+
+  startNavigation() {
+    let directionsService = new google.maps.DirectionsService;
+    let directionsDisplay = new google.maps.DirectionsRenderer;
+
+    directionsDisplay.setMap(this.map);
+    directionsDisplay.setPanel(this.directionsPanel.nativeElement);
+
+    let waypoints = [];
+   
+    this.sights.map((sight, index) => {
+      let waypoint = new Waypoint(new google.maps.LatLng(sight.lat, sight.lng));
+      //let w = new waypoint(new google.maps.LatLng(sight.lat, sight.lng), true);
+      //waypoint.location = new google.maps.LatLng(sight.lat, sight.lng);  
+      
+      waypoints.push(waypoint);
+    })
+
+    directionsService.route({
+
+      origin: new google.maps.LatLng(55.690460, 12.595370), 
+      destination: new google.maps.LatLng(55.690460, 12.595370),
+      waypoints,
+      optimizeWaypoints: true,
+      travelMode: google.maps.TravelMode['WALKING']
+    }, (res, status) => {
+
+      if(status == google.maps.DirectionsStatus.OK){
+          directionsDisplay.setDirections(res);
+          console.log(res);
+      } else {
+          console.warn(status);
+      }
+    });
   }
 
 }
