@@ -8,13 +8,23 @@
 </ion-header>
 
 <ion-content padding>
-  <p>Route overview! Hello from Mia</p>
-  <ion-list>
-    <ion-item *ngFor = "let sight of sights">
-      <ion-label>
-        {{sight.name}}
-      </ion-label>
-    </ion-item>
-  </ion-list>
+  <ion-card>
+    <ion-card-content>
+      <div #directionsPanel></div>
+    </ion-card-content>
+  </ion-card>
+  <div #map id="map"></div>
+  <div id="sights">
+    <ion-list>
+      <ion-item *ngFor = "let sight of sights">
+        <ion-label>
+          {{sight.name}}
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+  </div>
+
+
 
 </ion-content>

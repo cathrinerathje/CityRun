@@ -1,0 +1,16 @@
+
+#map{
+    width: 100%;
+    height: 80%;
+}
+
+#sights{
+    width: 100%;
+}
+
+#directionsPanel{
+    max-height: 100px;
+    overflow: scroll;
+    position: absolute;
+    z-index: 1;
+}
