@@ -28,23 +28,19 @@
     margin-bottom: 20px;
     margin-top: 10px;
     font-size: larger;
-    color: #686868;
+    color: var(--ion-color-dark-tint);
 }
 
 ion-card-header {
     margin-top: 60px;
-    color: white;
+    color: var(--ion-color-light);
     font-weight: bold;
     font-size: large;
     padding: 5px;
 }
 
 ion-card-subtitle {
-    color: white;
+    color: var(--ion-color-light);
     font-weight: bolder;
     font-size: small;
 }
-
-
-
-
