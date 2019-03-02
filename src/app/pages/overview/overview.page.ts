@@ -24,6 +24,7 @@ export class OverviewPage implements OnInit {
   sights: any; 
   origin: any;
   destination: any;
+  distance: string;
 
   @ViewChild('map') mapElement: ElementRef;
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
@@ -92,9 +93,22 @@ export class OverviewPage implements OnInit {
       if(status == google.maps.DirectionsStatus.OK){
           directionsDisplay.setDirections(res);
           console.log(res);
+          
+          //Calculate route distance
+          let legs = res.routes[0].legs;
+          this.distance = this.calculateDistance(legs);
+
       } else {
           console.warn(status);
       }
     });
+  }
+
+  calculateDistance(legs: any): string {
+    let distanceInMeters = 0;
+    legs.map((leg) => {
+      distanceInMeters += leg.distance.value;
+    });
+    return (distanceInMeters/1000).toFixed(1);
   }
 }

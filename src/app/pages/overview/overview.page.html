@@ -10,7 +10,8 @@
 <ion-content padding>
   <div #map id="map"></div>
   <div id="sights">
-    <h4>{{ sights.length }} sights selected:</h4>
+    <h5>Distance: {{ distance }} km</h5>
+    <h5>{{ sights.length }} sights selected:</h5>
     <ion-list>
       <ion-item *ngFor="let sight of sights">
         <ion-label>
@@ -20,7 +21,6 @@
     </ion-list>
   </div>
   <ion-card>
-    <ion-card-header>Directions:</ion-card-header>
     <ion-card-content>
       <div #directionsPanel></div>
     </ion-card-content>
