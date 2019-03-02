@@ -4,7 +4,6 @@ import { NavProviderService } from '../../providers/nav/nav-provider.service';
 declare var google: any;
 
 class Waypoint {
-  //location: string;
   location: string;
   stopover: boolean;
 
@@ -20,65 +19,50 @@ class Waypoint {
   styleUrls: ['./overview.page.scss'],
 })
 
-
 export class OverviewPage implements OnInit {
-  waypoints;
+  waypoints: Array<Waypoint>;
   sights: any; 
-  origin;
-  destination;
+  origin: any;
+  destination: any;
 
   @ViewChild('map') mapElement: ElementRef;
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
   map: any;
 
-
   constructor(public navCtrl: NavProviderService) { 
-    this.sights = this.navCtrl.get();
     this.waypoints= [];
-    console.log("test result:" + this.sights);
-
+    this.sights = this.navCtrl.get();
   }
   
-
   ngOnInit() {
-    this.constructWaypoints().then(() =>{
-      console.log("contructed waypoints finished");
-      
+    this.constructWaypoints().then(() =>{      
       this.loadMap();
       this.startNavigation();
     });
-    console.log("ngOnInit");
-    console.log("waypoints:" + this.waypoints)
-    
   }
 
-  /*
-  ngAfterViewInit(){
-    this.loadMap();
-    this.startNavigation();
-    console.log("nfAfterViewInit");
-  }
-  */
-
- constructWaypoints(){
+  constructWaypoints(){
     return new Promise((resolve, reject) => {
-      this.sights.map((sight) => {
-        let waypoint = new Waypoint(new google.maps.LatLng(sight.lat, sight.lng));
-        
-        this.waypoints.push(waypoint);
-      });
-      this.origin = new google.maps.LatLng(this.sights[0].lat, this.sights[0].lng);
-      this.destination = new google.maps.LatLng(this.sights[0].lat, this.sights[0].lng);
-      console.log("contructed waypoints");
-      resolve();
+      if (this.sights) {
+        this.sights.map((sight) => {
+          let waypoint = new Waypoint(new google.maps.LatLng(sight.lat, sight.lng));
+          this.waypoints.push(waypoint);
+        });
+        let originAndDestination = new google.maps.LatLng(this.sights[0].lat, this.sights[0].lng);
+        this.origin = originAndDestination;
+        this.destination = originAndDestination;
+        resolve();
+
+      } else {
+        reject();
+      }
+      
     }).catch((error) => {
       console.log("error");
     });
   }
 
-  loadMap(){
-    console.log("loadMap stated");
-    
+  loadMap(){    
     let latLng = this.origin;
 
     let mapOptions = {
@@ -91,7 +75,6 @@ export class OverviewPage implements OnInit {
   }
 
   startNavigation() {
-    console.log("startnavigation stated");
     let directionsService = new google.maps.DirectionsService;
     let directionsDisplay = new google.maps.DirectionsRenderer;
 
@@ -114,5 +97,4 @@ export class OverviewPage implements OnInit {
       }
     });
   }
-
 }

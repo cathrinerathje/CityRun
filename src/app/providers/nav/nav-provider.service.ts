@@ -11,17 +11,11 @@ export class NavProviderService {
 
   push(url: string, data: any){
     this.data = data;
-
     this.navCtrl.navigateForward('/'+ url);
-
   }
 
   get(){
     return this.data;
   }
-
-
-
-
 }
 
