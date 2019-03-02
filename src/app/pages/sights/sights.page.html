@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home" color="light"></ion-back-button>
     </ion-buttons>
-    <ion-title color="light">CityRun</ion-title>
+    <ion-title id="title" color="light">CityRun</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -19,6 +19,6 @@
     </ion-item>
   </ion-list>
 
-  <ion-button (click)="navigateToOverviewPage()" [disabled]="!sightChecked" color="secondary" class="generate-button">Generate</ion-button>
+  <ion-button expand="block" (click)="navigateToOverviewPage()" [disabled]="!sightChecked" color="secondary" class="generate-button">Generate</ion-button>
 
 </ion-content>

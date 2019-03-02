@@ -1,7 +1,14 @@
 ion-content {
+
     .generate-button {
         position: fixed;
         bottom: 20px;
+        width: 90%;
+    }
+
+    ion-checkbox {
+        margin-right: 10px;
+        --size: 20px;
     }
 }
 
