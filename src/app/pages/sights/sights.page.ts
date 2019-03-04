@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavProviderService } from '../../providers/nav/nav-provider.service';
+import { Observable } from 'rxjs';
+import { GooglePlacesProviderService } from '../../providers/google-places/google-places-provider.service';
+import { HttpClient } from '@angular/common/http';
 
 class Sight{
   name: string;
@@ -27,21 +30,31 @@ export class SightsPage implements OnInit {
   numberOfSightsChecked: number;
 
   //Array of sights
-  sights: Array<Sight>;
+  //sights: Array<Sight>;
+  sights: Observable<any>;
+  //sights: any;
 
-  data: any;
-
-  constructor(private router: Router, public navCtrl: NavProviderService) { 
+  constructor(private router: Router, public navCtrl: NavProviderService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient) { 
     this.numberOfSightsChecked = 0;
-    this.sights = [];
+    /* this.sights = [];
     this.sights.push(new Sight('Kastellet', 55.690460, 12.595370));
     this.sights.push(new Sight('Amalienborg', 55.684440, 12.592430));
     this.sights.push(new Sight('Vor Frelser Kirke', 55.672790, 12.594050));
     this.sights.push(new Sight('Storkespringvandet', 55.678950, 12.579040));
-    this.sights.push(new Sight('Marmor Kirken', 55.685060, 12.589260));
+    this.sights.push(new Sight('Marmor Kirken', 55.685060, 12.589260)); */
   }
 
+  /* ngOnInit() {
+    this.sights = this.http.get('https://maps.googleapis.com/maps/api/place/textsearch/json?query=copenhagen+point+of+interest&language=en&key=AIzaSyB-BMH5xlaB1EqizZDiCjwl_-kWqjxmQWo&fbclid=IwAR3xTppa3ZySlFo4bKRvwOs-7BgGCVpBf2KOe0WVauiZO-oWb6J4NlTCJbY');
+    this.sights.subscribe(data => {
+      console.log('my data: ', data);
+    });
+  } */
+
   ngOnInit() {
+    this.sights = this.googlePlaces.getPlaces();
+
+    //console.log(data);
   }
 
   checkSight(event: any, sight: Sight) {
@@ -63,7 +76,7 @@ export class SightsPage implements OnInit {
 
   navigateToOverviewPage() {
     let selectedSights = [];
-    selectedSights = this.sights.filter(sight => sight.checked == true);
+    //selectedSights = this.sights.filter(sight => sight.checked == true);
 
     this.navCtrl.push('overview', selectedSights);   
   }
