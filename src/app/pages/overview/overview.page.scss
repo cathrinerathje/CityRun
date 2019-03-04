@@ -8,9 +8,23 @@
     width: 100%;
 }
 
+.scroll {
+    height: 100%;
+}
+
 #directionsPanel{
-    max-height: 100px;
-    overflow: scroll;
     position: absolute;
     z-index: 1;
+}
+
+ion-card-content {
+    max-height: 300px;
+    overflow: scroll;
+}
+
+.run-button {
+    position: fixed;
+    bottom: 20px;
+    width: 90%;
+    z-index: 1000;
 }
