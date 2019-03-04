@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-//import map from 'rxjs/operator';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-//import 'rxjs/add/operator/map';
 
 class Sight{
   name: string;
@@ -42,9 +40,5 @@ export class GooglePlacesProviderService {
           );
         });
     }));
-    /* .subscribe(res => {
-      console.log('my data: ', res);
-      return res;
-    }); */
   }
 }
