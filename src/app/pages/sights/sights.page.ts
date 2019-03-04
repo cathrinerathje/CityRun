@@ -4,18 +4,21 @@ import { NavProviderService } from '../../providers/nav/nav-provider.service';
 import { Observable } from 'rxjs';
 import { GooglePlacesProviderService } from '../../providers/google-places/google-places-provider.service';
 import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 class Sight{
   name: string;
   checked: boolean; 
   lat: number;
   lng: number;
+  rating: number;
 
-  constructor(name: string, lat: number, lng: number){
+  constructor(name: string, lat: number, lng: number, rating: number){
     this.checked = false;
     this.name = name;
     this.lat = lat;
     this.lng = lng;
+    this.rating = rating;
   }
 }
 
@@ -30,9 +33,10 @@ export class SightsPage implements OnInit {
   numberOfSightsChecked: number;
 
   //Array of sights
-  //sights: Array<Sight>;
-  sights: Observable<any>;
+  sights: Observable<Sight[]>;
+  data: Observable<any>;
   //sights: any;
+  //data: any;
 
   constructor(private router: Router, public navCtrl: NavProviderService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient) { 
     this.numberOfSightsChecked = 0;
@@ -52,9 +56,38 @@ export class SightsPage implements OnInit {
   } */
 
   ngOnInit() {
-    this.sights = this.googlePlaces.getPlaces();
+    this.retrieveData().then(() => {
+      //console.log('efter retrieve: ' +this.data.results);
+      this.formatSights();
+    });
+    //console.log(this.data);
+    
+  }
 
-    //console.log(data);
+  retrieveData() {
+    return new Promise((resolve, reject) => {
+      console.log('called');
+      this.sights = this.googlePlaces.getPlaces();
+      /* this.googlePlaces.getPlaces().subscribe(data => {
+        this.sights = data;
+      }); */
+      console.log('hentet');
+      console.log(this.sights);
+      console.log('retrived data: ' + this.sights);
+      resolve();
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  formatSights() {
+    console.log('inden i format');
+    /* this.sights.pipe(map((item) => {
+      console.log('inden i map' + item);
+      let sight = new Sight(item.name, item.geometry.location.lat, item.geometry.location.lng, item.rating);
+      this.sights.push(sight);
+    })); */
+    console.log('formatted: ' + this.sights);
   }
 
   checkSight(event: any, sight: Sight) {

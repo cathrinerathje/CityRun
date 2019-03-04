@@ -9,11 +9,11 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item *ngFor="let sight of (sights | async)?.results">
+    <ion-item *ngFor="let sight of sights | async">
       <ion-checkbox (click)="checkSight($event, sight)"></ion-checkbox>
       <ion-label>
         <h3>{{sight.name}}</h3>
-        <p>bla bla bla</p>
+        <p>Rating: {{sight.rating}}</p>
       </ion-label>
       <ion-button item-end fill="clear" color="primary">View</ion-button>
     </ion-item>
