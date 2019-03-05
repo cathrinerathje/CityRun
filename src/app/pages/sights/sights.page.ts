@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { GooglePlacesProviderService } from '../../providers/google-places/google-places-provider.service';
 import { HttpClient } from '@angular/common/http';
 
+//Do we need a sight class? 
 class Sight{
   name: string;
   checked: boolean; 
@@ -40,6 +41,7 @@ export class SightsPage implements OnInit {
     this.sights = [];
   }
 
+  //First we call the retrieve data, when the data is "fetched", the data is formatted  
   ngOnInit() {
     this.retrieveData().then(() => {
       this.formatSights().then(() => {
@@ -48,6 +50,7 @@ export class SightsPage implements OnInit {
     });
   }
 
+  // Using the service and call the method getPlaces, data is know observables<Sight[]>
   retrieveData() {
     return new Promise((resolve, reject) => {
       this.data = this.googlePlaces.getPlaces();
@@ -58,6 +61,8 @@ export class SightsPage implements OnInit {
     });
   }
 
+  //data is know "transformed" from observables<Sight[]> to an array of sights 
+  // I have a question here: how can we transform them to "our" sight? Is it aware of what we did in the service???  
   formatSights() {
     return new Promise((resolve, reject) => {
       this.data.subscribe(sights => {
@@ -69,8 +74,8 @@ export class SightsPage implements OnInit {
     });
   }
 
+  // Controls the generate button(active or not) with a counter 
   checkSight(event: any, sight: Sight) {
-    
     if (event.target.checked) {
       this.numberOfSightsChecked--;
       sight.checked = false;    
@@ -86,6 +91,8 @@ export class SightsPage implements OnInit {
     }
   }
 
+  //When generate button is clicked the app will continue to the overview page 
+  //an array of only the sights that was selected(sight.checked=true) will be passed with  
   navigateToOverviewPage() {
     let selectedSights = [];
     selectedSights = this.sights.filter(sight => sight.checked == true);
