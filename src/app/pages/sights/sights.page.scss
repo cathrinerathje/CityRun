@@ -6,9 +6,30 @@ ion-content {
         width: 90%;
     }
 
-    ion-checkbox {
+    ion-checkbox{
         margin-right: 10px;
         --size: 20px;
+    }
+
+    ion-checkbox button{
+        width: 50%;
+    }
+
+    .checkbox{
+        
+        
+    }
+
+    .view-button{
+        
+    }
+
+    .list-item{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+
     }
 }
 

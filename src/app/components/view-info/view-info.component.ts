@@ -11,4 +11,6 @@ export class ViewInfoComponent implements OnInit {
 
   ngOnInit() {}
 
+  
+
 }

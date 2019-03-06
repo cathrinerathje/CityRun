@@ -5,8 +5,9 @@ import { Observable } from 'rxjs';
 import { GooglePlacesProviderService } from '../../providers/google-places/google-places-provider.service';
 import { HttpClient } from '@angular/common/http';
 import { Sight } from '../../providers/google-places/google-places-provider.service';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, PopoverController } from '@ionic/angular';
 
+import { ViewInfoComponent } from '../../components/view-info/view-info.component';
 
 @Component({
   selector: 'app-sights',
@@ -24,7 +25,7 @@ export class SightsPage implements OnInit {
 
   //public loadingController: LoadingController;
 
-  constructor(private router: Router, public navCtrl: NavProviderService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient, public loadingController: LoadingController) {
+  constructor(private router: Router, public navCtrl: NavProviderService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient, public loadingController: LoadingController, private popoverController: PopoverController) {
     this.numberOfSightsChecked = 0;
     this.data1 = new Observable<Sight[]>();
     this.data2 = new Observable<Sight[]>();
@@ -108,5 +109,17 @@ export class SightsPage implements OnInit {
     let selectedSights = [];
     selectedSights = this.sights.filter(sight => sight.checked == true);
     this.navCtrl.push('overview', selectedSights);
+  }
+
+  async viewInfo(ev: any){
+    console.log('viewInfo was called')
+    const popover = await this.popoverController.create({
+      component: ViewInfoComponent,
+      event: ev,
+      translucent: false
+    });
+    return await popover.present();
+
+
   }
 }

@@ -10,15 +10,22 @@
 <ion-content padding>
   <ion-list>
     <ion-item *ngFor="let sight of sights">
-      <ion-checkbox (click)="checkSight($event, sight)"></ion-checkbox>
-      <ion-label>
-        <h3>{{sight.name}}</h3>
-        <p>Rating: {{sight.rating}}</p>
-      </ion-label>
-      <ion-button item-end fill="clear" color="primary">View</ion-button>
+      <div class="list-item">
+        <div class="checkbox">
+          <ion-checkbox (click)="checkSight($event, sight)"></ion-checkbox>
+          <ion-label>
+            <h3>{{sight.name}}</h3>
+            <p>Rating: {{sight.rating}}</p>
+          </ion-label>
+        </div>
+        <div class="view-buttom">
+          <ion-button (click)="viewInfo()" item-end fill="clear" color="primary">View</ion-button>
+        </div>
+      </div>
+          
+
     </ion-item>
   </ion-list>
-
   <ion-button expand="block" (click)="navigateToOverviewPage()" [disabled]="!sightChecked" color="secondary" class="generate-button">Generate</ion-button>
 
 </ion-content>
