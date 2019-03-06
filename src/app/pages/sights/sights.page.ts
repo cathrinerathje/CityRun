@@ -6,6 +6,8 @@ import { GooglePlacesProviderService } from '../../providers/google-places/googl
 import { HttpClient } from '@angular/common/http';
 import { Sight } from '../../providers/google-places/google-places-provider.service';
 
+
+
 @Component({
   selector: 'app-sights',
   templateUrl: './sights.page.html',
