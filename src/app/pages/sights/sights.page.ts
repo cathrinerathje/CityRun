@@ -18,12 +18,14 @@ export class SightsPage implements OnInit {
   sightChecked: boolean;
   numberOfSightsChecked: number;
 
-  data: Observable<Sight[]>;
+  data1: Observable<Sight[]>;
+  data2: Observable<Sight[]>;
   sights: Array<Sight>;
 
   constructor(private router: Router, public navCtrl: NavProviderService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient, public loadingController: LoadingController) {
     this.numberOfSightsChecked = 0;
-    this.data = new Observable<Sight[]>();
+    this.data1 = new Observable<Sight[]>();
+    this.data2 = new Observable<Sight[]>();
     this.sights = [];
 
   }
@@ -44,9 +46,17 @@ export class SightsPage implements OnInit {
 
   // Using the service and call the method getPlaces, data is know observables<Sight[]>
   retrieveData() {
+    let url1 = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=copenhagen+point+of+interest&language=en&key=AIzaSyB-BMH5xlaB1EqizZDiCjwl_-kWqjxmQWo&fbclid=IwAR3xTppa3ZySlFo4bKRvwOs-7BgGCVpBf2KOe0WVauiZO-oWb6J4NlTCJbY';
+    let url2 = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=copenhagen+point+of+interest&language=en&r&hasNextPage=true4&nextPage()=true&key=AIzaSyB-BMH5xlaB1EqizZDiCjwl_-kWqjxmQWo&pagetoken=CsQEMwIAAAzw65jb0-BT0anHr8resqzujj9YJgg4QoOmFTH3Ex1CDP_zPz4DIgkDtAYr38qQEVu-RxuauZVM_SB9SX1wtay-ispTwp9IELvv88xSfnebbfBcTBDYGHVnyoANZOrrV0jcYqFrxfTBYce2-HkjlYCb5VYVfSKAJ3nRo-ciCqY97b3pxU3qScQBW6w1KJ2aM69Awah-X7XGowyZRz-9nk8nHfZBoUppugLTKWdld3gK2XUFuHHd3o9yOnB_OvP_jucROtaxML3JnuLYq-VfXQhb4wf3oUQLbiTIuSUeXsmUNBV3RjS5mV0yLck7YypswHSaoLPMB99UIFgjW07ExCJ9wXhtJcScBaLB13dC1URsrM8sGGvVhH-1Lgst7eLkfacCdiSAJcU-cVXorA-4oYsj7PUHSEn6N8UlUWNX6GZK1fzeio94CN2Kdo5puvAkkc14aRGzKMZomwuKqkLZmEEzT-0eSJWvZraCW8pHMn_D1qKj51jXiHToKQsH6sZ5y9mKgzr_oIApE7vzxyllmw-QlZPG8KuwDFQ2QRza-gf9Ub-7F3ZyHJ9niX57Kf3-LpObNdqVn-kHZeEkRuiZw-Ah8LysZeAXKMjbjP94KCIC8UZ5dCSsDDzarxzD-6qiYuSjGtPWn0lLR75wmICzTJKMWQDRo8voTv_AOmsWHcovn7jmk_-Y1CxJL7lPMVrLm6jtA7mRoKzGnQCJB1Jg9c3DAGn3xPyqgYya7-IItOMiL4I-q0YnJdvxtnnQUhgWiBIQ18Vw6h6DY17fQaWc6Nrt-RoU3MvKyzatN8EDkYzp5s_9fgxEIBw';
     return new Promise((resolve, reject) => {
-      this.data = this.googlePlaces.getPlaces();
-      console.log('retrived data: ' + this.data);
+      this.data1 = this.googlePlaces.getPlaces(url1);
+      this.data2 = this.googlePlaces.getPlaces(url2);
+      console.log('retrived data first page: ' + this.data1);
+      console.log('retrived data second page: ' + this.data2)
+      //resolve();
+      Promise.all([this.data1, this.data2]).then((values) =>{
+        console.log('values: '+ values);
+      });
       resolve();
     }).catch((error) => {
       console.log(error);
@@ -56,7 +66,12 @@ export class SightsPage implements OnInit {
   //data is know "transformed" from observables<Sight[]> to an array of sights
   formatSights() {
     return new Promise((resolve, reject) => {
-      this.data.subscribe(sights => {
+      this.data1.subscribe(sights => {
+        sights.map(sight => {
+          this.sights.push(sight);
+        });
+      });
+      this.data2.subscribe(sights => {
         sights.map(sight => {
           this.sights.push(sight);
         });
