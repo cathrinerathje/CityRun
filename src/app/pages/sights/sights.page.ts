@@ -21,8 +21,6 @@ export class SightsPage implements OnInit {
   data: Observable<Sight[]>;
   sights: Array<Sight>;
 
-  //public loadingController: LoadingController;
-
   constructor(private router: Router, public navCtrl: NavProviderService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient, public loadingController: LoadingController) {
     this.numberOfSightsChecked = 0;
     this.data = new Observable<Sight[]>();
@@ -41,9 +39,7 @@ export class SightsPage implements OnInit {
           loading.dismiss();
         });
       });
-
     })
-
   }
 
   // Using the service and call the method getPlaces, data is know observables<Sight[]>
@@ -58,7 +54,6 @@ export class SightsPage implements OnInit {
   }
 
   //data is know "transformed" from observables<Sight[]> to an array of sights
-  // I have a question here: how can we transform them to "our" sight? Is it aware of what we did in the service???
   formatSights() {
     return new Promise((resolve, reject) => {
       this.data.subscribe(sights => {
@@ -88,7 +83,7 @@ export class SightsPage implements OnInit {
   }
 
   //When generate button is clicked the app will continue to the overview page
-  //an array of only the sights that was selected(sight.checked=true) will be passed with
+  //an array of only the sights that was selected(sight.checked=true) will be passed on
   navigateToOverviewPage() {
     let selectedSights = [];
     selectedSights = this.sights.filter(sight => sight.checked == true);
