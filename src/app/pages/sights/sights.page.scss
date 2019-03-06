@@ -1,5 +1,10 @@
 ion-content {
 
+    ion-list {
+        overflow: scroll;
+        height: 90%;
+    }
+
     .generate-button {
         position: fixed;
         bottom: 20px;

@@ -6,7 +6,7 @@ import { GooglePlacesProviderService } from '../../providers/google-places/googl
 import { HttpClient } from '@angular/common/http';
 import { Sight } from '../../providers/google-places/google-places-provider.service';
 import { LoadingController, PopoverController } from '@ionic/angular';
-
+import { ViewInfoComponent } from '../../components/view-info/view-info.component';
 
 
 @Component({
