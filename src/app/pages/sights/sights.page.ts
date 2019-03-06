@@ -19,12 +19,13 @@ export class SightsPage implements OnInit {
   data: Observable<Sight[]>;
   sights: Array<Sight>;
 
-  constructor(private router: Router, public navCtrl: NavProviderService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient) { 
+  constructor(private router: Router, public navCtrl: NavProviderService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient) {
     this.numberOfSightsChecked = 0;
     this.data = new Observable<Sight[]>();
     this.sights = [];
   }
 
+  //First we call the retrieve data, when the data is "fetched", the data is formatted
   ngOnInit() {
     this.retrieveData().then(() => {
       this.formatSights().then(() => {
@@ -33,6 +34,7 @@ export class SightsPage implements OnInit {
     });
   }
 
+  // Using the service and call the method getPlaces, data is know observables<Sight[]>
   retrieveData() {
     return new Promise((resolve, reject) => {
       this.data = this.googlePlaces.getPlaces();
@@ -43,6 +45,8 @@ export class SightsPage implements OnInit {
     });
   }
 
+  //data is know "transformed" from observables<Sight[]> to an array of sights
+  // I have a question here: how can we transform them to "our" sight? Is it aware of what we did in the service???
   formatSights() {
     return new Promise((resolve, reject) => {
       this.data.subscribe(sights => {
@@ -54,14 +58,14 @@ export class SightsPage implements OnInit {
     });
   }
 
+  // Controls the generate button(active or not) with a counter
   checkSight(event: any, sight: Sight) {
-    
     if (event.target.checked) {
       this.numberOfSightsChecked--;
-      sight.checked = false;    
+      sight.checked = false;
     } else {
       this.numberOfSightsChecked++;
-      sight.checked = true;      
+      sight.checked = true;
     }
 
     if (this.numberOfSightsChecked === 0) {
@@ -71,9 +75,11 @@ export class SightsPage implements OnInit {
     }
   }
 
+  //When generate button is clicked the app will continue to the overview page
+  //an array of only the sights that was selected(sight.checked=true) will be passed with
   navigateToOverviewPage() {
     let selectedSights = [];
     selectedSights = this.sights.filter(sight => sight.checked == true);
-    this.navCtrl.push('overview', selectedSights);   
+    this.navCtrl.push('overview', selectedSights);
   }
 }

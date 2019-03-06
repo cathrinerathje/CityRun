@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 export class Sight{
   name: string;
-  checked: boolean; 
+  checked: boolean;
   lat: number;
   lng: number;
   rating: number;
