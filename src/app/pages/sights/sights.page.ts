@@ -4,22 +4,7 @@ import { NavProviderService } from '../../providers/nav/nav-provider.service';
 import { Observable } from 'rxjs';
 import { GooglePlacesProviderService } from '../../providers/google-places/google-places-provider.service';
 import { HttpClient } from '@angular/common/http';
-
-class Sight{
-  name: string;
-  checked: boolean; 
-  lat: number;
-  lng: number;
-  rating: number;
-
-  constructor(name: string, lat: number, lng: number, rating: number){
-    this.checked = false;
-    this.name = name;
-    this.lat = lat;
-    this.lng = lng;
-    this.rating = rating;
-  }
-}
+import { Sight } from '../../providers/google-places/google-places-provider.service';
 
 @Component({
   selector: 'app-sights',
