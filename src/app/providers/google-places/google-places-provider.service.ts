@@ -26,9 +26,9 @@ export class GooglePlacesProviderService {
 
   constructor(private http: HttpClient) { }
 
-  getPlaces(): Observable<Sight[]> {
+  getPlaces(url: string): Observable<Sight[]> {
     let proxyurl = 'https://cors-anywhere.herokuapp.com/';
-    let url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=copenhagen+point+of+interest&language=en&key=AIzaSyB-BMH5xlaB1EqizZDiCjwl_-kWqjxmQWo&fbclid=IwAR3xTppa3ZySlFo4bKRvwOs-7BgGCVpBf2KOe0WVauiZO-oWb6J4NlTCJbY';
+    //let url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=copenhagen+point+of+interest&language=en&key=AIzaSyB-BMH5xlaB1EqizZDiCjwl_-kWqjxmQWo&fbclid=IwAR3xTppa3ZySlFo4bKRvwOs-7BgGCVpBf2KOe0WVauiZO-oWb6J4NlTCJbY';
     return this.http.get(proxyurl + url)
       .pipe(map(res => {
         return res.results.map(item => {
