@@ -13,9 +13,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavProviderService } from './providers/nav/nav-provider.service';
 import { GooglePlacesProviderService } from './providers/google-places/google-places-provider.service';
 
+import { ViewInfoComponent } from '../app/components/view-info/view-info.component';
+
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
+  declarations: [AppComponent, ViewInfoComponent],
+  entryComponents: [ViewInfoComponent],
   imports: [BrowserModule, HttpClientModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [
     StatusBar,
