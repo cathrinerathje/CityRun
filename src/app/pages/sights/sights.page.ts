@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { GooglePlacesProviderService } from '../../providers/google-places/google-places-provider.service';
 import { HttpClient } from '@angular/common/http';
 import { Sight } from '../../providers/google-places/google-places-provider.service';
-
+import { LoadingController } from '@ionic/angular';
 
 
 @Component({
@@ -21,19 +21,29 @@ export class SightsPage implements OnInit {
   data: Observable<Sight[]>;
   sights: Array<Sight>;
 
-  constructor(private router: Router, public navCtrl: NavProviderService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient) {
+  //public loadingController: LoadingController;
+
+  constructor(private router: Router, public navCtrl: NavProviderService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient, public loadingController: LoadingController) {
     this.numberOfSightsChecked = 0;
     this.data = new Observable<Sight[]>();
     this.sights = [];
+
   }
 
   //First we call the retrieve data, when the data is "fetched", the data is formatted
-  ngOnInit() {
-    this.retrieveData().then(() => {
-      this.formatSights().then(() => {
-        console.log(this.sights);
+  async ngOnInit() {
+    const loading = await this.loadingController.create({});
+
+    loading.present().then(()=>{
+      this.retrieveData().then(() => {
+        this.formatSights().then(() => {
+          console.log(this.sights);
+          loading.dismiss();
+        });
       });
-    });
+
+    })
+
   }
 
   // Using the service and call the method getPlaces, data is know observables<Sight[]>
