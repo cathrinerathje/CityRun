@@ -10,5 +10,10 @@ ion-content {
         margin-right: 10px;
         --size: 20px;
     }
+
+    ion-list {
+        overflow: scroll;
+        height: 90%;
+    }
 }
 

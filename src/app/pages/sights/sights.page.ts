@@ -7,7 +7,6 @@ import { HttpClient } from '@angular/common/http';
 import { Sight } from '../../providers/google-places/google-places-provider.service';
 import { LoadingController } from '@ionic/angular';
 
-
 @Component({
   selector: 'app-sights',
   templateUrl: './sights.page.html',
@@ -27,7 +26,6 @@ export class SightsPage implements OnInit {
     this.data1 = new Observable<Sight[]>();
     this.data2 = new Observable<Sight[]>();
     this.sights = [];
-
   }
 
   //First we call the retrieve data, when the data is "fetched", the data is formatted
@@ -44,6 +42,17 @@ export class SightsPage implements OnInit {
     })
   }
 
+  /* filterSights() {
+    console.log('called');
+    return new Promise((resolve, reject) => {
+      console.log('inside promise');
+      this.filteredSights = [];
+      this.filteredSights = this.sights.filter((sight: Sight) => sight.name === "Kastellet");
+      console.log('filtered: ' + this.filteredSights.length);
+      resolve();
+    });
+  } */
+
   // Using the service and call the method getPlaces, data is know observables<Sight[]>
   retrieveData() {
     let url1 = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=copenhagen+point+of+interest&language=en&key=AIzaSyB-BMH5xlaB1EqizZDiCjwl_-kWqjxmQWo&fbclid=IwAR3xTppa3ZySlFo4bKRvwOs-7BgGCVpBf2KOe0WVauiZO-oWb6J4NlTCJbY';
@@ -53,7 +62,6 @@ export class SightsPage implements OnInit {
       this.data2 = this.googlePlaces.getPlaces(url2);
       console.log('retrived data first page: ' + this.data1);
       console.log('retrived data second page: ' + this.data2)
-      //resolve();
       Promise.all([this.data1, this.data2]).then((values) =>{
         console.log('values: '+ values);
       });
@@ -68,12 +76,16 @@ export class SightsPage implements OnInit {
     return new Promise((resolve, reject) => {
       this.data1.subscribe(sights => {
         sights.map(sight => {
-          this.sights.push(sight);
+          if (!(sight.name.toUpperCase().includes('TOUR')) && sight.lat > 55.660000) {
+            this.sights.push(sight);
+          }
         });
       });
       this.data2.subscribe(sights => {
         sights.map(sight => {
-          this.sights.push(sight);
+          if (!(sight.name.toUpperCase().includes('TOUR')) && sight.lat > 55.660000) {
+            this.sights.push(sight);
+          }
         });
       });
       resolve();
