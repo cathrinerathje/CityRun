@@ -122,15 +122,14 @@ export class SightsPage implements OnInit {
     this.navCtrl.push('overview', selectedSights);
   }
 
-  async viewInfo(ev: any){
+  async viewInfo(sight: Sight){
     console.log('viewInfo was called')
     const popover = await this.popoverController.create({
       component: ViewInfoComponent,
-      event: ev,
+      componentProps: sight,
+      //event: ev,
       translucent: false
     });
     return await popover.present();
-
-
   }
 }

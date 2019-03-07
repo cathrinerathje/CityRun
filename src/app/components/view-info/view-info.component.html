@@ -1,9 +1,16 @@
-<div class="popover">
-  <ion-icon name="arrow-back"></ion-icon>
-  <p text-center>
-    view-info works!
-    Hello
+<ion-content class="popover">
+  <ion-fab>
+    <ion-fab-button (click)="close()" size="small" activated="true"></ion-fab-button>
+  </ion-fab>
+  <h4>{{ sightName }}</h4>
+  <p>
+    Rating: {{ rating }}
   </p>
-</div>
+  <div class="badges">
+    <ion-badge class="badge" color="secondary" *ngFor="let type of types">{{ type }}</ion-badge>
+  </div>
+</ion-content>
+  
+  
 
 

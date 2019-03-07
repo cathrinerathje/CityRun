@@ -19,13 +19,10 @@
           </ion-label>
         </div>
         <div class="view-button">
-          <ion-button (click)="viewInfo()" item-end fill="clear" color="primary">View</ion-button>
+          <ion-button (click)="viewInfo(sight)" item-end fill="clear" color="primary">View</ion-button>
         </div>
       </div>
-          
-
     </ion-item>
   </ion-list>
   <ion-button expand="block" (click)="navigateToOverviewPage()" [disabled]="!sightChecked" color="secondary" class="generate-button">Generate</ion-button>
-
 </ion-content>
