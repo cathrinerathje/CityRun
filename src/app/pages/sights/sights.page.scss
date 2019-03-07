@@ -16,18 +16,12 @@ ion-content {
         --size: 20px;
     }
 
-
-    ion-checkbox button{
-        width: 50%;
-    }
-
     .checkbox{
-        
-        
+        display: flex;
     }
 
     .view-button{
-        
+        z-index: 1000;
     }
 
     .list-item{
@@ -35,7 +29,8 @@ ion-content {
         flex-direction: row;
         justify-content: space-between;
         width: 100%;
-
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 }
 
