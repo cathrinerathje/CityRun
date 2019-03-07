@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NavProviderService } from '../../providers/nav/nav-provider.service';
+import { Sight } from 'src/app/providers/google-places/google-places-provider.service';
+import { ViewInfoComponent } from 'src/app/components/view-info/view-info.component';
+import { PopoverController } from '@ionic/angular';
 
 declare var google: any;
 
@@ -30,7 +33,7 @@ export class OverviewPage implements OnInit {
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
   map: any;
 
-  constructor(public navCtrl: NavProviderService) { 
+  constructor(public navCtrl: NavProviderService, private popoverController: PopoverController) { 
     this.waypoints= [];
     this.sights = this.navCtrl.get();
   }
@@ -110,5 +113,14 @@ export class OverviewPage implements OnInit {
       distanceInMeters += leg.distance.value;
     });
     return (distanceInMeters/1000).toFixed(1);
+  }
+
+  async viewInfo(sight: Sight){
+    const popover = await this.popoverController.create({
+      component: ViewInfoComponent,
+      componentProps: sight,
+      translucent: false
+    });
+    return await popover.present();
   }
 }
