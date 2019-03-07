@@ -81,14 +81,14 @@ export class SightsPage implements OnInit {
     return new Promise((resolve, reject) => {
       this.data1.subscribe(sights => {
         sights.map(sight => {
-          if (!(sight.name.toUpperCase().includes('TOUR')) && sight.lat > 55.660000) {
+          if (!(sight.name.toUpperCase().includes('TOUR')) && !(sight.name.toUpperCase().includes('TIVOLI')) && sight.lat > 55.660000) {
             this.sights.push(sight);
           }
         });
       });
       this.data2.subscribe(sights => {
         sights.map(sight => {
-          if (!(sight.name.toUpperCase().includes('TOUR')) && sight.lat > 55.660000) {
+          if (!(sight.name.toUpperCase().includes('TOUR')) && !(sight.name.toUpperCase().includes('TIVOLI')) && sight.lat > 55.660000) {
             this.sights.push(sight);
           }
         });

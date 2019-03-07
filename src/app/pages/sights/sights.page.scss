@@ -16,6 +16,12 @@ ion-content {
         --size: 20px;
     }
 
+    ion-label {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
     .checkbox{
         display: flex;
     }
