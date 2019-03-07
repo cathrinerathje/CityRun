@@ -6,10 +6,15 @@ import { PopoverController } from '@ionic/angular';
 
 declare var google: any;
 
+/** Defines a Waypoint as a point along a route */
 class Waypoint {
   location: string;
   stopover: boolean;
 
+  /**
+   * Creates a Waypoint.
+   * @param {string} location - The location.
+   */
   constructor(location: string){
     this.location = location;
     this.stopover = true;
@@ -22,22 +27,27 @@ class Waypoint {
   styleUrls: ['./overview.page.scss'],
 })
 
+/** Defines the overview page of a generated route */
 export class OverviewPage implements OnInit {
   waypoints: Array<Waypoint>;
   sights: any; 
   origin: any;
   destination: any;
   distance: string;
+  map: any;
 
   @ViewChild('map') mapElement: ElementRef;
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
-  map: any;
 
   constructor(public navCtrl: NavProviderService, private popoverController: PopoverController) { 
     this.waypoints= [];
     this.sights = this.navCtrl.get();
   }
   
+  /**
+   * Executes functions synchronously using Promises.
+   * When constructWaypoints() resolves, loadMap() and startNavigation() executes asynchronously. 
+   */
   ngOnInit() {
     this.constructWaypoints().then(() =>{      
       this.loadMap();
@@ -45,6 +55,11 @@ export class OverviewPage implements OnInit {
     });
   }
 
+  /**
+   * Constructs an array of Waypoints by mapping over each selected sight and extracting its location.
+   * Sets origin and destination to the first sight selected.
+   * @return {Promise} - A Promise either resolved or rejected.
+   */
   constructWaypoints(){
     return new Promise((resolve, reject) => {
       if (this.sights) {
@@ -56,7 +71,6 @@ export class OverviewPage implements OnInit {
         this.origin = originAndDestination;
         this.destination = originAndDestination;
         resolve();
-
       } else {
         reject();
       }
@@ -66,6 +80,9 @@ export class OverviewPage implements OnInit {
     });
   }
 
+  /**
+   * Sets map options and initializes a new map.
+   */
   loadMap(){    
     let latLng = this.origin;
 
@@ -78,6 +95,13 @@ export class OverviewPage implements OnInit {
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
   }
 
+  /**
+   * Initializes route navigation with Google's DirectionsService and DirectionsRenderer.
+   * The DirectionsService generates the route, passing origin, destination, waypoints 
+   * and travel mode to it's route() method.
+   * If the DirectionsStatus of the response is OK, the DirectionsRenderer sets and displays
+   * the navigation directions.
+   */
   startNavigation() {
     let directionsService = new google.maps.DirectionsService;
     let directionsDisplay = new google.maps.DirectionsRenderer;
@@ -99,6 +123,7 @@ export class OverviewPage implements OnInit {
           
           //Calculate route distance
           let legs = res.routes[0].legs;
+          console.log(legs);
           this.distance = this.calculateDistance(legs);
 
       } else {
@@ -107,7 +132,12 @@ export class OverviewPage implements OnInit {
     });
   }
 
-  calculateDistance(legs: any): string {
+  /**
+   * Calculates the distance of a route.
+   * @param {Array<any>} legs - The individual routes between each waypoint.
+   * @return {string} - The total distance of the route in meters.
+   */
+  calculateDistance(legs: Array<any>): string {
     let distanceInMeters = 0;
     legs.map((leg) => {
       distanceInMeters += leg.distance.value;
@@ -115,6 +145,11 @@ export class OverviewPage implements OnInit {
     return (distanceInMeters/1000).toFixed(1);
   }
 
+  /**
+   * Activates a popover of extra information about a sight.
+   * @param {Sight} sight - The Sight object for which the view button was pressed.
+   * @return {} - The total distance of the route in meters.
+   */
   async viewInfo(sight: Sight){
     const popover = await this.popoverController.create({
       component: ViewInfoComponent,
