@@ -12,7 +12,8 @@ class Waypoint {
   stopover: boolean;
 
   /**
-   * Creates a Waypoint.
+   * @constructor
+   * Creates a new Waypoint.
    * @param {string} location - The location.
    */
   constructor(location: string){
@@ -39,12 +40,18 @@ export class OverviewPage implements OnInit {
   @ViewChild('map') mapElement: ElementRef;
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
 
+  /**
+   * @constructor
+   * Uses NavProviderService to retrieve data from previous page and PopoverController to initiate 
+   * a popover.
+   */
   constructor(public navCtrl: NavProviderService, private popoverController: PopoverController) { 
     this.waypoints= [];
     this.sights = this.navCtrl.get();
   }
   
   /**
+   * @function
    * Executes functions synchronously using Promises.
    * When constructWaypoints() resolves, loadMap() and startNavigation() executes asynchronously. 
    */
@@ -56,6 +63,7 @@ export class OverviewPage implements OnInit {
   }
 
   /**
+   * @function
    * Constructs an array of Waypoints by mapping over each selected sight and extracting its location.
    * Sets origin and destination to the first sight selected.
    * @return {Promise} - A Promise either resolved or rejected.
@@ -81,6 +89,7 @@ export class OverviewPage implements OnInit {
   }
 
   /**
+   * @function
    * Sets map options and initializes a new map.
    */
   loadMap(){    
@@ -96,11 +105,12 @@ export class OverviewPage implements OnInit {
   }
 
   /**
+   * @function
    * Initializes route navigation with Google's DirectionsService and DirectionsRenderer.
    * The DirectionsService generates the route, passing origin, destination, waypoints 
    * and travel mode to it's route() method.
    * If the DirectionsStatus of the response is OK, the DirectionsRenderer sets and displays
-   * the navigation directions.
+   * the navigation directions on the page.
    */
   startNavigation() {
     let directionsService = new google.maps.DirectionsService;
@@ -133,6 +143,7 @@ export class OverviewPage implements OnInit {
   }
 
   /**
+   * @function
    * Calculates the distance of a route.
    * @param {Array<any>} legs - The individual routes between each waypoint.
    * @return {string} - The total distance of the route in meters.
@@ -146,9 +157,10 @@ export class OverviewPage implements OnInit {
   }
 
   /**
+   * @function
    * Activates a popover of extra information about a sight.
    * @param {Sight} sight - The Sight object for which the view button was pressed.
-   * @return {} - The total distance of the route in meters.
+   * @return {Promise<void>} - A Promise after the popover has been created.
    */
   async viewInfo(sight: Sight){
     const popover = await this.popoverController.create({
