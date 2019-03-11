@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NavProviderService } from '../../providers/nav/nav-provider.service';
 import { Sight } from 'src/app/providers/google-places/google-places-provider.service';
 import { ViewInfoComponent } from 'src/app/components/view-info/view-info.component';
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, NavController } from '@ionic/angular';
 import * as $ from 'jquery'; 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Subscription } from 'rxjs';
@@ -47,9 +47,9 @@ export class OverviewPage implements OnInit {
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
 
   /** Uses NavProviderService to retrieve data from previous page and PopoverController to initiate a popover */
-  constructor(public navCtrl: NavProviderService, private popoverController: PopoverController, private geolocation: Geolocation) { 
+  constructor(public navProvider: NavProviderService, private popoverController: PopoverController, private geolocation: Geolocation, private navCtrl: NavController) { 
     this.waypoints= [];
-    this.sights = this.navCtrl.get();
+    this.sights = this.navProvider.get();
   }
   
   /**
@@ -190,11 +190,12 @@ export class OverviewPage implements OnInit {
       $('#sights').hide();
       $('#map').css('height', '100%');
       $('ion-card').css({'max-height': '200px', 'overflow': 'scroll', 'position': 'absolute', 'z-index': '100', 'top': '0px', 'left': '0px', 'background': 'var(--ion-color-tertiary-tint)'});
-      let endRunButton = document.createElement("ion-button");
-      $('ion-content').append(endRunButton);
-      $(endRunButton).text('End run'); 
-      $(endRunButton).css({'position': 'fixed', 'bottom': '20px', 'width': '90%', 'z-index': '1000', 'background': 'red' }); //color': '#fc4a1a
-      $(endRunButton).attr({'click': 'endRun()', 'expand': 'block'});
+      $('.end-run-button').css('display', 'block');
+      //let endRunButton = document.createElement("ion-button");
+      //$('ion-content').append(endRunButton);
+      //$(endRunButton).text('End run'); 
+      //$(endRunButton).css({'position': 'fixed', 'bottom': '20px', 'width': '90%', 'z-index': '1000', 'background': 'red' }); //color': '#fc4a1a
+      //$(endRunButton).attr({'click': 'endRun()', 'expand': 'block'});
     });
     this.startTracking();
   }
@@ -240,8 +241,15 @@ export class OverviewPage implements OnInit {
    * @todo
    */
   endRun(){
-    alert("Are you sure you want to stop tracking?");
-    this.positionSubscription.unsubscribe();
-    this.currentMapTrack.setMap(null);
+    let answer = confirm("Are you sure you want to stop tracking?");
+    if(answer){
+      this.positionSubscription.unsubscribe();
+      this.currentMapTrack.setMap(null);
+      console.log('tracking stopped');
+      //reload overview page
+      //this.navCtrl.setRoot(this.navCtrl.getActive().component);
+    }
+
+
   }
 }
