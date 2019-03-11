@@ -190,7 +190,11 @@ export class OverviewPage implements OnInit {
       $('#sights').hide();
       $('#map').css('height', '100%');
       $('ion-card').css({'max-height': '200px', 'overflow': 'scroll', 'position': 'absolute', 'z-index': '100', 'top': '0px', 'left': '0px', 'background': 'var(--ion-color-tertiary-tint)'});
-      
+      let endRunButton = document.createElement("ion-button");
+      $('ion-content').append(endRunButton);
+      $(endRunButton).text('End run'); 
+      $(endRunButton).css({'position': 'fixed', 'bottom': '20px', 'width': '90%', 'z-index': '1000', 'background': 'red' }); //color': '#fc4a1a
+      $(endRunButton).attr({'click': 'endRun()', 'expand': 'block'});
     });
     this.startTracking();
   }
@@ -231,5 +235,13 @@ export class OverviewPage implements OnInit {
       this.currentMapTrack.setMap(this.map);
     }
 
+  }
+  /**
+   * @todo
+   */
+  endRun(){
+    alert("Are you sure you want to stop tracking?");
+    this.positionSubscription.unsubscribe();
+    this.currentMapTrack.setMap(null);
   }
 }
