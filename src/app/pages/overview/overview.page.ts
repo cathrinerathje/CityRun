@@ -5,7 +5,8 @@ import { ViewInfoComponent } from 'src/app/components/view-info/view-info.compon
 import { PopoverController } from '@ionic/angular';
 import * as $ from 'jquery'; 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { resolve } from 'path';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 declare var google: any;
 
@@ -38,6 +39,10 @@ export class OverviewPage implements OnInit {
   distance: string;
   map: any;
 
+  positionSubscription: Subscription;
+  trackedRoute = [];
+  currentMapTrack = null;
+
   @ViewChild('map') mapElement: ElementRef;
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
 
@@ -60,17 +65,15 @@ export class OverviewPage implements OnInit {
     });
     
   }
-
+  /**
+   * @todo
+   */
   getCurrentPosition(){
     return new Promise((resolve, reject)=>{
       this.geolocation.getCurrentPosition().then(position =>{
-        console.log('coords '+ position.coords.latitude);
         let currentPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        console.log('current pos:' + currentPosition);
         this.origin = currentPosition;
         this.destination = currentPosition;
-        console.log('origin: ' + this.origin);
-        console.log('des: ' + this.destination);
         resolve();
       }).catch((error)=>{
         console.log('Error getting location', error);
@@ -81,6 +84,7 @@ export class OverviewPage implements OnInit {
 
   }
   /**
+   * @todo 
    * Constructs an array of Waypoints by mapping over each selected sight and extracting its location.
    * Sets origin and destination to the first sight selected.
    * @return {Promise} - A Promise either resolved or rejected.
@@ -92,12 +96,10 @@ export class OverviewPage implements OnInit {
           let waypoint = new Waypoint(new google.maps.LatLng(sight.lat, sight.lng));
           this.waypoints.push(waypoint);
         });
-        //let originAndDestination = new google.maps.LatLng(this.sights[0].lat, this.sights[0].lng);
         resolve();
       } else {
         reject();
       }
-      
     }).catch((error) => {
       console.log("error");
     });
@@ -180,14 +182,54 @@ export class OverviewPage implements OnInit {
     return await popover.present();
   }
 
+  /**
+   * @todo
+   */
   run(){
     $(document).ready(()=>{
       $('#sights').hide();
       $('#map').css('height', '100%');
       $('ion-card').css({'max-height': '200px', 'overflow': 'scroll', 'position': 'absolute', 'z-index': '100', 'top': '0px', 'left': '0px', 'background': 'var(--ion-color-tertiary-tint)'});
-
       
     });
+    this.startTracking();
+  }
+
+  /**
+   * @todo
+   */
+  startTracking(){
+    this.positionSubscription = this.geolocation.watchPosition()
+    .pipe(
+      filter((p)=> p.coords !== undefined)
+    )
+    .subscribe(data =>{
+      setTimeout(()=>{
+        this.trackedRoute.push({lat: data.coords.latitude, lng: data.coords.longitude});
+        this.redrawPath(this.trackedRoute);
+      }, 0);
+    })
+  }
+
+  /**
+   * @todo
+   * @param path 
+   */
+  redrawPath(path){
+    if (this.currentMapTrack) {
+      this.currentMapTrack.setMap(null);
+    }
+ 
+    if (path.length > 1) {
+      this.currentMapTrack = new google.maps.Polyline({
+        path: path,
+        geodesic: true,
+        strokeColor: '#ff00ff',
+        strokeOpacity: 1.0,
+        strokeWeight: 3
+      });
+      this.currentMapTrack.setMap(this.map);
+    }
 
   }
 }
