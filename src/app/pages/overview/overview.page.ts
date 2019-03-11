@@ -3,6 +3,7 @@ import { NavProviderService } from '../../providers/nav/nav-provider.service';
 import { Sight } from 'src/app/providers/google-places/google-places-provider.service';
 import { ViewInfoComponent } from 'src/app/components/view-info/view-info.component';
 import { PopoverController } from '@ionic/angular';
+import * as $ from 'jquery'; 
 
 declare var google: any;
 
@@ -155,5 +156,17 @@ export class OverviewPage implements OnInit {
       translucent: false
     });
     return await popover.present();
+  }
+
+  run(){
+    $(document).ready(()=>{
+      $('#sights').hide();
+      $('#map').css('height', '100%');
+      $('ion-card').css({'max-height': '200px', 'overflow': 'scroll', 'position': 'absolute', 'z-index': '100', 'top': '0px', 'left': '0px', 'background': 'var(--ion-color-tertiary-tint)'});
+      $('.scroll').css('height', '100%');
+
+      
+    });
+
   }
 }

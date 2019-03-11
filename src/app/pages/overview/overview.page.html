@@ -12,7 +12,7 @@
   <div id="sights">
     <h5>Distance: {{ distance }} km</h5>
     <h5>{{ sights.length }} sights selected:</h5>
-    <ion-button expand="block" color="secondary" class="run-button">Run</ion-button>
+    <ion-button (click)="run()" expand="block" color="secondary" class="run-button">Run</ion-button>
     <ion-list>
       <ion-item *ngFor="let sight of sights">
         <ion-label>
@@ -25,8 +25,9 @@
     </ion-list>
   </div>
   <ion-card>
-    <ion-card-content>
-      <div #directionsPanel></div>
-    </ion-card-content>
+      <ion-card-content>
+        <div #directionsPanel></div>
+      </ion-card-content>
   </ion-card>
+  
 </ion-content>
