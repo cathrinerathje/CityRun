@@ -3,9 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-/**
- * Defines a sight 
- */
+/** Defines a sight */
 export class Sight{
   name: string;
   checked: boolean;
@@ -15,13 +13,12 @@ export class Sight{
   types: Array<string>;
 
   /**
-   * @constructor
    * A sight consist of the following params: 
-   * @param name 
-   * @param lat 
-   * @param lng 
-   * @param rating 
-   * @param types 
+   * @param {string} name 
+   * @param {number} lat 
+   * @param {number} lng 
+   * @param {number} rating 
+   * @param {Array<string>} types - List of tags describing the sight 
    */
   constructor(name: string, lat: number, lng: number, rating: number, types: Array<string>){
     this.checked = false;
@@ -37,23 +34,19 @@ export class Sight{
   providedIn: 'root'
 })
 
-/**
- * Fetches data from the Google Places API
- */
+/** Fetches data from the Google Places API */
 export class GooglePlacesProviderService {
 
   /**
-   * @constructor
-   * Uses the http to send get request
+   * Uses http to send get request
    * @param {HttpClient} http 
    */
   constructor(private http: HttpClient) { }
 
   /**
-   * @function getPlaces 
    * Fetches data about places of type point_of_interest and maps it into an Observable of sights  
-   * @param {Sting} url the API request
-   * @returns {Observable<Sights} sights from the Google Places API
+   * @param {Sting} url - The API request
+   * @returns {Observable<Sight[]>} - Sights objects from the Google Places API
    */
   getPlaces(url: string): Observable<Sight[]> {
     let proxyurl = 'https://cors-anywhere.herokuapp.com/';

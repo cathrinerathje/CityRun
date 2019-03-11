@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { NavProviderService } from '../../providers/nav/nav-provider.service';
 import { Observable } from 'rxjs';
 import { GooglePlacesProviderService } from '../../providers/google-places/google-places-provider.service';
@@ -15,9 +14,7 @@ import { ViewInfoComponent } from '../../components/view-info/view-info.componen
   styleUrls: ['./sights.page.scss'],
 })
 
-/**
- * Controls the list of sights page
- */
+/** Controls the list of sights page */
 export class SightsPage implements OnInit {
   sightChecked: boolean;
   numberOfSightsChecked: number;
@@ -27,17 +24,14 @@ export class SightsPage implements OnInit {
   sights: Array<Sight>;
 
   /**
-   * @constructor 
    * Uses the following params: 
-   * EVT FJERN ROUTER 
-   * @param router 
-   * @param navCtrl to navigate to other pages
-   * @param googlePlaces fetch data from Google Places API
-   * @param http get request 
-   * @param loadingController run a spinner while loading the list of sights  
-   * @param popoverController viewing a popover
+   * @param navCtrl - To navigate to other pages
+   * @param googlePlaces - To fetch data from Google Places API
+   * @param http - To perform a get request 
+   * @param loadingController - To run a spinner while loading the list of sights  
+   * @param popoverController - To initiate a popover
    */
-  constructor(private router: Router, public navCtrl: NavProviderService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient, public loadingController: LoadingController, private popoverController: PopoverController) {
+  constructor(public navCtrl: NavProviderService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient, public loadingController: LoadingController, private popoverController: PopoverController) {
     this.numberOfSightsChecked = 0;
     this.data1 = new Observable<Sight[]>();
     this.data2 = new Observable<Sight[]>();
@@ -45,16 +39,15 @@ export class SightsPage implements OnInit {
   }
 
   /**
-   * @function ngOnInit
-   * Controls the loading and fetching of data with promises to ensure the execution of a new method does not happen 
+   * Controls the loading and fetching of data with Promises to ensure the execution of a new method does not happen 
    * before the first method called is finished executing. 
-   * Calls the retriveData, when the data is fetched the data is formatted by the formatSights method. 
+   * Calls retriveData(), when the data is fetched the data is formatted by the filterSights() method. 
    */
   async ngOnInit() {
     const loading = await this.loadingController.create({});
     loading.present().then(()=>{
       this.retrieveData().then(() => {
-        this.formatSights().then(() => {
+        this.filterSights().then(() => {
           console.log(this.sights);
           loading.dismiss();
         });
@@ -62,22 +55,9 @@ export class SightsPage implements OnInit {
     })
   }
 
-  // maybe delete
-  /* filterSights() {
-    console.log('called');
-    return new Promise((resolve, reject) => {
-      console.log('inside promise');
-      this.filteredSights = [];
-      this.filteredSights = this.sights.filter((sight: Sight) => sight.name === "Kastellet");
-      console.log('filtered: ' + this.filteredSights.length);
-      resolve();
-    });
-  } */
-
-
-  /**
-   * @function retrieveData
-   * Uses the googlePlaces service to fetch data, getting two pages of sights(url1, url2).   
+  /** Uses the googlePlaces service to fetch two pages of data. Then uses Promise.all() to wait
+   * for the two data calls to finish before resolving.
+   * @returns {Promise}
    */
   retrieveData() {
     let url1 = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=copenhagen+point+of+interest&language=en&key=AIzaSyB-BMH5xlaB1EqizZDiCjwl_-kWqjxmQWo&fbclid=IwAR3xTppa3ZySlFo4bKRvwOs-7BgGCVpBf2KOe0WVauiZO-oWb6J4NlTCJbY';
@@ -96,11 +76,11 @@ export class SightsPage implements OnInit {
     });
   }
 
-  /**
-   * @function formatSights maybe rename now that we also filter the data? cleanData/Sights? or maybe it is okay ;) 
-   * Transforms the data from an Observables<Sight[]> to an array of sights and filters the data.
+  /**  
+   * Subscribes to the Observable<Sight[]> in order to access the data inside. Then filters the
+   * array of sights to not contain certain sights.
    */
-  formatSights() {
+  filterSights() {
     return new Promise((resolve, reject) => {
       this.data1.subscribe(sights => {
         sights.map(sight => {
@@ -121,9 +101,9 @@ export class SightsPage implements OnInit {
   }
 
   /**
-   * Controls the generate button(active or not) with a counter and sets the checked attribute to false or true  
-   * @param event the performed action from the user  
-   * @param sight the sight that is being checked  
+   * Controls the generate button(active or not) with a counter and sets the checked attribute to false or true.
+   * @param {any} event - The performed action from the user  
+   * @param {Sight} sight - The sight that is being checked  
    */
   checkSight(event: any, sight: Sight) {
     if (event.target.checked) {
@@ -142,9 +122,8 @@ export class SightsPage implements OnInit {
   }
 
   /**
-   * @function navigateToOverviewPage
-   * Navigates to overview page when generate button is clicked,
-   * an array of only the sights that was selected(sight.checked=true) will be passed on.
+   * Navigates to overview page when generate button is clicked.
+   * An array of only the sights that was selected (sight.checked=true) is passed on.
    */
   navigateToOverviewPage() {
     let selectedSights = [];
@@ -153,10 +132,9 @@ export class SightsPage implements OnInit {
   }
 
   /**
-   * @function viewInfo
-   * Creates the popover component, and pass on the clicked sight information   
-   * @param {Sight} sight 
-   * @returns the popover infobox
+   * Activates a popover of extra information about a sight and pass the information of the clicked. 
+   * @param {Sight} sight - The Sight object for which the view button was pressed.
+   * @return {Promise<void>} - Present the popover overlay after it has been created.
    */
   async viewInfo(sight: Sight){
     console.log('viewInfo was called')

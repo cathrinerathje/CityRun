@@ -15,7 +15,6 @@ export class NavProviderService {
   constructor(public navCtrl: NavController) { }
 
   /**
-   * @function
    * Saves the passed data for later retrieval and navigates to a specified url.
    * @param {string} url - The url of the page being navigated to.
    * @param {any} data - The data to be saved and retrived later.
@@ -26,7 +25,6 @@ export class NavProviderService {
   }
 
   /**
-   * @function
    * Returns the stored data.
    * @return {any} - The stored data.
    */
