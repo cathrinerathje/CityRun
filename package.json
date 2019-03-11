@@ -63,7 +63,7 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-geolocation": {
-        "GEOLOCATION_USAGE_DESCRIPTION": "To track your position"
+        "GEOLOCATION_USAGE_DESCRIPTION": "To track your walks"
       }
     }
   }
