@@ -4,6 +4,8 @@ import { Sight } from 'src/app/providers/google-places/google-places-provider.se
 import { ViewInfoComponent } from 'src/app/components/view-info/view-info.component';
 import { PopoverController } from '@ionic/angular';
 import * as $ from 'jquery'; 
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { resolve } from 'path';
 
 declare var google: any;
 
@@ -40,7 +42,7 @@ export class OverviewPage implements OnInit {
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
 
   /** Uses NavProviderService to retrieve data from previous page and PopoverController to initiate a popover */
-  constructor(public navCtrl: NavProviderService, private popoverController: PopoverController) { 
+  constructor(public navCtrl: NavProviderService, private popoverController: PopoverController, private geolocation: Geolocation) { 
     this.waypoints= [];
     this.sights = this.navCtrl.get();
   }
@@ -50,12 +52,34 @@ export class OverviewPage implements OnInit {
    * When constructWaypoints() resolves, loadMap() and startNavigation() executes asynchronously. 
    */
   ngOnInit() {
-    this.constructWaypoints().then(() =>{      
-      this.loadMap();
-      this.startNavigation();
+    this.getCurrentPosition().then(()=>{
+      this.constructWaypoints().then(() =>{      
+        this.loadMap();
+        this.startNavigation();
+      });
     });
+    
   }
 
+  getCurrentPosition(){
+    return new Promise((resolve, reject)=>{
+      this.geolocation.getCurrentPosition().then(position =>{
+        console.log('coords '+ position.coords.latitude);
+        let currentPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        console.log('current pos:' + currentPosition);
+        this.origin = currentPosition;
+        this.destination = currentPosition;
+        console.log('origin: ' + this.origin);
+        console.log('des: ' + this.destination);
+        resolve();
+      }).catch((error)=>{
+        console.log('Error getting location', error);
+        reject();
+      });
+    });
+    
+
+  }
   /**
    * Constructs an array of Waypoints by mapping over each selected sight and extracting its location.
    * Sets origin and destination to the first sight selected.
@@ -68,9 +92,7 @@ export class OverviewPage implements OnInit {
           let waypoint = new Waypoint(new google.maps.LatLng(sight.lat, sight.lng));
           this.waypoints.push(waypoint);
         });
-        let originAndDestination = new google.maps.LatLng(this.sights[0].lat, this.sights[0].lng);
-        this.origin = originAndDestination;
-        this.destination = originAndDestination;
+        //let originAndDestination = new google.maps.LatLng(this.sights[0].lat, this.sights[0].lng);
         resolve();
       } else {
         reject();
@@ -163,7 +185,6 @@ export class OverviewPage implements OnInit {
       $('#sights').hide();
       $('#map').css('height', '100%');
       $('ion-card').css({'max-height': '200px', 'overflow': 'scroll', 'position': 'absolute', 'z-index': '100', 'top': '0px', 'left': '0px', 'background': 'var(--ion-color-tertiary-tint)'});
-      $('.scroll').css('height', '100%');
 
       
     });

@@ -15,6 +15,8 @@ import { GooglePlacesProviderService } from './providers/google-places/google-pl
 
 import { ViewInfoComponent } from '../app/components/view-info/view-info.component';
 
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+
 @NgModule({
   declarations: [AppComponent, ViewInfoComponent],
   entryComponents: [ViewInfoComponent],
@@ -24,6 +26,7 @@ import { ViewInfoComponent } from '../app/components/view-info/view-info.compone
     SplashScreen,
     NavProviderService,
     GooglePlacesProviderService,
+    Geolocation,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
