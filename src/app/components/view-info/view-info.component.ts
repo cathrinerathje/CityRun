@@ -11,7 +11,7 @@ import { PopoverController, NavParams } from '@ionic/angular';
 export class ViewInfoComponent implements OnInit {
   sightName: string;
   rating: number;
-  types: Array<string>;
+  tags: Array<string>;
 
   /**
    * Uses PopoverController to control the popover and NavParams to retrieve and display 
@@ -20,7 +20,7 @@ export class ViewInfoComponent implements OnInit {
   constructor(private popController: PopoverController, private navParams: NavParams) {
     this.sightName = navParams.get('name');
     this.rating = navParams.get('rating');
-    //this.types = navParams.get('types');
+    this.tags = navParams.get('tags');
   }
 
   ngOnInit() {}
