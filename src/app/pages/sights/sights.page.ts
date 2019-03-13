@@ -24,7 +24,9 @@ export class SightsPage implements OnInit {
   data1: Observable<Response>;
   data2: Observable<Sight[]>;
   sights: Array<Sight>;
+  
   sygicSights: any;
+  ss: Observable<Sight[]>;
 
   /**
    * Uses the following params: 
@@ -39,7 +41,10 @@ export class SightsPage implements OnInit {
     //this.data1 = new Observable<Sight[]>();
     this.data2 = new Observable<Sight[]>();
     this.sights = [];
+
+    this.ss = new Observable<Sight[]>();
     this.sygicSights = [];
+
   }
 
   /**
@@ -51,11 +56,9 @@ export class SightsPage implements OnInit {
     const loading = await this.loadingController.create({});
     loading.present().then(()=>{
       this.retrieveData().then(() => {
-        console.log(this.sygicSights);
-        /* this.filterSights().then(() => {
-          console.log(this.sights);
+        this.filterSights().then(() => {
           loading.dismiss();
-        }); */
+        });
       });
     })
   }
@@ -82,8 +85,9 @@ export class SightsPage implements OnInit {
 
     return new Promise((resolve, reject) => {
       //this.data1 = this.sygicPlaces.getPlaces();
-      this.sygicSights = this.sygicPlaces.getPlaces();
-      console.log('called sygic: ' + this.sygicSights);
+      this.ss = this.sygicPlaces.getPlaces();
+      console.log('called sygic: ' + this.ss);
+      
       resolve();
     }).catch((error) => {
       console.log(error);
@@ -112,14 +116,17 @@ export class SightsPage implements OnInit {
         });
       });
       resolve();
-    }); */
-    /* return new Promise((resolve, reject) => {
-      this.data1.subscribe(sights => {
+    });*/
+    return new Promise((resolve, reject) => {
+    
+      this.ss.subscribe(sights => {
+        console.log('filtersights');
         sights.map(sight => {
           this.sights.push(sight);
         });
       });
-    }); */
+      resolve();
+    }); 
   }
 
   /**
