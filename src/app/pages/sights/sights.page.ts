@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { NavProviderService } from '../../providers/nav/nav-provider.service';
 import { Observable } from 'rxjs';
 import { GooglePlacesProviderService } from '../../providers/google-places/google-places-provider.service';
+import { SygicPlacesService } from '../../providers/sygic-places/sygic-places.service';
 import { HttpClient } from '@angular/common/http';
-import { Sight } from '../../providers/google-places/google-places-provider.service';
+//import { Sight } from '../../providers/google-places/google-places-provider.service';
+import { Sight } from '../../providers/sygic-places/sygic-places.service';
 import { LoadingController, PopoverController } from '@ionic/angular';
 import { ViewInfoComponent } from '../../components/view-info/view-info.component';
 
@@ -19,9 +21,10 @@ export class SightsPage implements OnInit {
   sightChecked: boolean;
   numberOfSightsChecked: number;
 
-  data1: Observable<Sight[]>;
+  data1: Observable<Response>;
   data2: Observable<Sight[]>;
   sights: Array<Sight>;
+  sygicSights: any;
 
   /**
    * Uses the following params: 
@@ -31,11 +34,12 @@ export class SightsPage implements OnInit {
    * @param loadingController - To run a spinner while loading the list of sights  
    * @param popoverController - To initiate a popover
    */
-  constructor(public navCtrl: NavProviderService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient, public loadingController: LoadingController, private popoverController: PopoverController) {
+  constructor(public navCtrl: NavProviderService, public sygicPlaces: SygicPlacesService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient, public loadingController: LoadingController, private popoverController: PopoverController) {
     this.numberOfSightsChecked = 0;
-    this.data1 = new Observable<Sight[]>();
+    //this.data1 = new Observable<Sight[]>();
     this.data2 = new Observable<Sight[]>();
     this.sights = [];
+    this.sygicSights = [];
   }
 
   /**
@@ -47,10 +51,11 @@ export class SightsPage implements OnInit {
     const loading = await this.loadingController.create({});
     loading.present().then(()=>{
       this.retrieveData().then(() => {
-        this.filterSights().then(() => {
+        console.log(this.sygicSights);
+        /* this.filterSights().then(() => {
           console.log(this.sights);
           loading.dismiss();
-        });
+        }); */
       });
     })
   }
@@ -60,7 +65,7 @@ export class SightsPage implements OnInit {
    * @returns {Promise}
    */
   retrieveData() {
-    let url1 = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=copenhagen+point+of+interest&language=en&key=AIzaSyB-BMH5xlaB1EqizZDiCjwl_-kWqjxmQWo&fbclid=IwAR3xTppa3ZySlFo4bKRvwOs-7BgGCVpBf2KOe0WVauiZO-oWb6J4NlTCJbY';
+    /* let url1 = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=copenhagen+point+of+interest&language=en&key=AIzaSyB-BMH5xlaB1EqizZDiCjwl_-kWqjxmQWo&fbclid=IwAR3xTppa3ZySlFo4bKRvwOs-7BgGCVpBf2KOe0WVauiZO-oWb6J4NlTCJbY';
     let url2 = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=copenhagen+point+of+interest&language=en&r&hasNextPage=true4&nextPage()=true&key=AIzaSyB-BMH5xlaB1EqizZDiCjwl_-kWqjxmQWo&pagetoken=CsQEMwIAAAzw65jb0-BT0anHr8resqzujj9YJgg4QoOmFTH3Ex1CDP_zPz4DIgkDtAYr38qQEVu-RxuauZVM_SB9SX1wtay-ispTwp9IELvv88xSfnebbfBcTBDYGHVnyoANZOrrV0jcYqFrxfTBYce2-HkjlYCb5VYVfSKAJ3nRo-ciCqY97b3pxU3qScQBW6w1KJ2aM69Awah-X7XGowyZRz-9nk8nHfZBoUppugLTKWdld3gK2XUFuHHd3o9yOnB_OvP_jucROtaxML3JnuLYq-VfXQhb4wf3oUQLbiTIuSUeXsmUNBV3RjS5mV0yLck7YypswHSaoLPMB99UIFgjW07ExCJ9wXhtJcScBaLB13dC1URsrM8sGGvVhH-1Lgst7eLkfacCdiSAJcU-cVXorA-4oYsj7PUHSEn6N8UlUWNX6GZK1fzeio94CN2Kdo5puvAkkc14aRGzKMZomwuKqkLZmEEzT-0eSJWvZraCW8pHMn_D1qKj51jXiHToKQsH6sZ5y9mKgzr_oIApE7vzxyllmw-QlZPG8KuwDFQ2QRza-gf9Ub-7F3ZyHJ9niX57Kf3-LpObNdqVn-kHZeEkRuiZw-Ah8LysZeAXKMjbjP94KCIC8UZ5dCSsDDzarxzD-6qiYuSjGtPWn0lLR75wmICzTJKMWQDRo8voTv_AOmsWHcovn7jmk_-Y1CxJL7lPMVrLm6jtA7mRoKzGnQCJB1Jg9c3DAGn3xPyqgYya7-IItOMiL4I-q0YnJdvxtnnQUhgWiBIQ18Vw6h6DY17fQaWc6Nrt-RoU3MvKyzatN8EDkYzp5s_9fgxEIBw';
     return new Promise((resolve, reject) => {
       this.data1 = this.googlePlaces.getPlaces(url1);
@@ -73,7 +78,17 @@ export class SightsPage implements OnInit {
       resolve();
     }).catch((error) => {
       console.log(error);
+    }); */
+
+    return new Promise((resolve, reject) => {
+      //this.data1 = this.sygicPlaces.getPlaces();
+      this.sygicSights = this.sygicPlaces.getPlaces();
+      console.log('called sygic: ' + this.sygicSights);
+      resolve();
+    }).catch((error) => {
+      console.log(error);
     });
+    
   }
 
   /**  
@@ -81,7 +96,7 @@ export class SightsPage implements OnInit {
    * array of sights to not contain certain sights.
    */
   filterSights() {
-    return new Promise((resolve, reject) => {
+    /* return new Promise((resolve, reject) => {
       this.data1.subscribe(sights => {
         sights.map(sight => {
           if (!(sight.name.toUpperCase().includes('TOUR')) && !(sight.name.toUpperCase().includes('TIVOLI')) && sight.lat > 55.660000) {
@@ -97,7 +112,14 @@ export class SightsPage implements OnInit {
         });
       });
       resolve();
-    });
+    }); */
+    /* return new Promise((resolve, reject) => {
+      this.data1.subscribe(sights => {
+        sights.map(sight => {
+          this.sights.push(sight);
+        });
+      });
+    }); */
   }
 
   /**

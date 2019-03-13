@@ -20,7 +20,7 @@ export class ViewInfoComponent implements OnInit {
   constructor(private popController: PopoverController, private navParams: NavParams) {
     this.sightName = navParams.get('name');
     this.rating = navParams.get('rating');
-    this.types = navParams.get('types');
+    //this.types = navParams.get('types');
   }
 
   ngOnInit() {}
