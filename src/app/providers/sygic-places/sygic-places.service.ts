@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions} from '@angular/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { pipe } from '@angular/core/src/render3';
 //import 'rxjs/add/operator/map';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 /** Defines a sight */
 export class Sight{
@@ -47,38 +45,15 @@ export class Sight{
 })
 export class SygicPlacesService {
 
-  constructor(private http: Http, private httpClient: HttpClient) { }
+  constructor(private http: Http) { }
 
-  getPlaces(): Observable<any> {
-    
-    let proxyurl = 'https://cors-anywhere.herokuapp.com/';
-    let url = proxyurl + 'https://api.sygictravelapi.com/1.1/en/places/list?parents=city:8&categories=sightseeing&limit=23';
-  
-    let header = new HttpHeaders()
-    header.set('x-api-key', 'HQyCeEZ4EO7nxSQkPUzmx1D5qTiQEdWF1aSpy6iZ');
-    
-    //let header = new HttpHeaders()
-    //header.append('x-api-key', 'HQyCeEZ4EO7nxSQkPUzmx1D5qTiQEdWF1aSpy6iZ');
-    //let header = new Headers();
-    //header.append('x-api-key', 'HQyCeEZ4EO7nxSQkPUzmx1D5qTiQEdWF1aSpy6iZ');
+  getPlaces(): Observable<Response> {
+    let url = 'https://api.sygictravelapi.com/1.1/en/places/list?parents=city:8&categories=sightseeing&limit=23';
+    let header = new Headers();
+    header.append('x-api-key', 'HQyCeEZ4EO7nxSQkPUzmx1D5qTiQEdWF1aSpy6iZ');
 
-    //return this.httpClient.get(url, {headers: header})
-    return this.httpClient.get(url, {headers: header})
-    .pipe(map(res => {
-      return res.data.map(item => {
-      return new Sight(
-        item.name,
-        item.original_name,
-        item.location.lat,
-        item.location.lng,
-        item.perex,
-        item.thumbnail_url,
-        item.rating,
-        item.categories
-      );
-      });
-    }));
-    
+    return this.http.get(url, {headers: header});
+      //.pipe(map(res => res.json()));
       /* .pipe(map(res => {
         console.log(res);
         return res.map(item => {
