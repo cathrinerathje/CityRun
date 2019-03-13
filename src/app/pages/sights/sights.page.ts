@@ -4,11 +4,44 @@ import { Observable } from 'rxjs';
 import { GooglePlacesProviderService } from '../../providers/google-places/google-places-provider.service';
 import { SygicPlacesService } from '../../providers/sygic-places/sygic-places.service';
 import { HttpClient } from '@angular/common/http';
-//import { Sight } from '../../providers/google-places/google-places-provider.service';
-import { Sight } from '../../providers/sygic-places/sygic-places.service';
 import { LoadingController, PopoverController } from '@ionic/angular';
 import { ViewInfoComponent } from '../../components/view-info/view-info.component';
 
+/** Defines a sight */
+export class Sight{
+  name: string;
+  originalName: string;
+  checked: boolean;
+  lat: number;
+  lng: number;
+  description: string;
+  thumbnail: string;
+  rating: number;
+  tags: Array<string>;
+
+  /**
+   * A sight consist of the following params: 
+   * @param {string} name 
+   * @param {string} originalName
+   * @param {number} lat 
+   * @param {number} lng 
+   * @param {string} description
+   * @param {string} thumbnail
+   * @param {number} rating 
+   * @param {Array<string>} tags - List of tags describing the sight 
+   */
+  constructor(name: string, originalName: string, lat: number, lng: number, description: string, thumbnail: string, rating: number, tags: Array<string>){
+    this.checked = false;
+    this.name = name;
+    this.originalName = originalName;
+    this.lat = lat;
+    this.lng = lng;
+    this.description = description;
+    this.thumbnail = thumbnail;
+    this.rating = rating;
+    this.tags = tags;
+  }
+}
 
 @Component({
   selector: 'app-sights',
@@ -21,10 +54,8 @@ export class SightsPage implements OnInit {
   sightChecked: boolean;
   numberOfSightsChecked: number;
 
-  data1: Observable<Response>;
-  data2: Observable<Sight[]>;
+  data: any;
   sights: Array<Sight>;
-  sygicSights: any;
 
   /**
    * Uses the following params: 
@@ -36,10 +67,8 @@ export class SightsPage implements OnInit {
    */
   constructor(public navCtrl: NavProviderService, public sygicPlaces: SygicPlacesService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient, public loadingController: LoadingController, private popoverController: PopoverController) {
     this.numberOfSightsChecked = 0;
-    //this.data1 = new Observable<Sight[]>();
-    this.data2 = new Observable<Sight[]>();
+    this.data = [];
     this.sights = [];
-    this.sygicSights = [];
   }
 
   /**
@@ -51,11 +80,10 @@ export class SightsPage implements OnInit {
     const loading = await this.loadingController.create({});
     loading.present().then(()=>{
       this.retrieveData().then(() => {
-        console.log(this.sygicSights);
-        /* this.filterSights().then(() => {
+        this.filterSights().then(() => {
           console.log(this.sights);
           loading.dismiss();
-        }); */
+        });
       });
     })
   }
@@ -65,30 +93,13 @@ export class SightsPage implements OnInit {
    * @returns {Promise}
    */
   retrieveData() {
-    /* let url1 = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=copenhagen+point+of+interest&language=en&key=AIzaSyB-BMH5xlaB1EqizZDiCjwl_-kWqjxmQWo&fbclid=IwAR3xTppa3ZySlFo4bKRvwOs-7BgGCVpBf2KOe0WVauiZO-oWb6J4NlTCJbY';
-    let url2 = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=copenhagen+point+of+interest&language=en&r&hasNextPage=true4&nextPage()=true&key=AIzaSyB-BMH5xlaB1EqizZDiCjwl_-kWqjxmQWo&pagetoken=CsQEMwIAAAzw65jb0-BT0anHr8resqzujj9YJgg4QoOmFTH3Ex1CDP_zPz4DIgkDtAYr38qQEVu-RxuauZVM_SB9SX1wtay-ispTwp9IELvv88xSfnebbfBcTBDYGHVnyoANZOrrV0jcYqFrxfTBYce2-HkjlYCb5VYVfSKAJ3nRo-ciCqY97b3pxU3qScQBW6w1KJ2aM69Awah-X7XGowyZRz-9nk8nHfZBoUppugLTKWdld3gK2XUFuHHd3o9yOnB_OvP_jucROtaxML3JnuLYq-VfXQhb4wf3oUQLbiTIuSUeXsmUNBV3RjS5mV0yLck7YypswHSaoLPMB99UIFgjW07ExCJ9wXhtJcScBaLB13dC1URsrM8sGGvVhH-1Lgst7eLkfacCdiSAJcU-cVXorA-4oYsj7PUHSEn6N8UlUWNX6GZK1fzeio94CN2Kdo5puvAkkc14aRGzKMZomwuKqkLZmEEzT-0eSJWvZraCW8pHMn_D1qKj51jXiHToKQsH6sZ5y9mKgzr_oIApE7vzxyllmw-QlZPG8KuwDFQ2QRza-gf9Ub-7F3ZyHJ9niX57Kf3-LpObNdqVn-kHZeEkRuiZw-Ah8LysZeAXKMjbjP94KCIC8UZ5dCSsDDzarxzD-6qiYuSjGtPWn0lLR75wmICzTJKMWQDRo8voTv_AOmsWHcovn7jmk_-Y1CxJL7lPMVrLm6jtA7mRoKzGnQCJB1Jg9c3DAGn3xPyqgYya7-IItOMiL4I-q0YnJdvxtnnQUhgWiBIQ18Vw6h6DY17fQaWc6Nrt-RoU3MvKyzatN8EDkYzp5s_9fgxEIBw';
-    return new Promise((resolve, reject) => {
-      this.data1 = this.googlePlaces.getPlaces(url1);
-      this.data2 = this.googlePlaces.getPlaces(url2);
-      console.log('retrived data first page: ' + this.data1);
-      console.log('retrived data second page: ' + this.data2)
-      Promise.all([this.data1, this.data2]).then((values) =>{
-        console.log('values: '+ values);
-      });
-      resolve();
-    }).catch((error) => {
-      console.log(error);
-    }); */
-
     return new Promise((resolve, reject) => {
       //this.data1 = this.sygicPlaces.getPlaces();
-      this.sygicSights = this.sygicPlaces.getPlaces();
-      console.log('called sygic: ' + this.sygicSights);
+      this.data = this.sygicPlaces.getPlaces();
       resolve();
     }).catch((error) => {
       console.log(error);
     });
-    
   }
 
   /**  
@@ -96,30 +107,25 @@ export class SightsPage implements OnInit {
    * array of sights to not contain certain sights.
    */
   filterSights() {
-    /* return new Promise((resolve, reject) => {
-      this.data1.subscribe(sights => {
-        sights.map(sight => {
-          if (!(sight.name.toUpperCase().includes('TOUR')) && !(sight.name.toUpperCase().includes('TIVOLI')) && sight.lat > 55.660000) {
-            this.sights.push(sight);
-          }
-        });
-      });
-      this.data2.subscribe(sights => {
-        sights.map(sight => {
-          if (!(sight.name.toUpperCase().includes('TOUR')) && !(sight.name.toUpperCase().includes('TIVOLI')) && sight.lat > 55.660000) {
-            this.sights.push(sight);
-          }
+    return new Promise((resolve, reject) => {
+      this.data.subscribe(sights => {
+        console.log(sights);
+        sights.data.places.map(sight => {
+          let formattedSight = new Sight(
+            sight.name,
+            sight.original_name,
+            sight.location.lat,
+            sight.location.lng,
+            sight.perex,
+            sight.thumbnail_url,
+            sight.rating,
+            sight.categories
+          );
+          this.sights.push(formattedSight);
         });
       });
       resolve();
-    }); */
-    /* return new Promise((resolve, reject) => {
-      this.data1.subscribe(sights => {
-        sights.map(sight => {
-          this.sights.push(sight);
-        });
-      });
-    }); */
+    });
   }
 
   /**
