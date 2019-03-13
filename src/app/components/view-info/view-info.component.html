@@ -2,10 +2,14 @@
   <ion-fab>
     <ion-fab-button (click)="close()" size="small" activated="true"></ion-fab-button>
   </ion-fab>
-  <h4>{{ sightName }}</h4>
+  <div>
+    <img src="{{ thumbnail }}">
+  </div>
+  <h4>{{ sightName }} ({{ originalName }})</h4>
   <p>
     Rating: {{ rating }}
   </p>
+  <p>{{ description }}</p>
   <div class="badges">
     <ion-badge class="badge" color="secondary" *ngFor="let tag of tags">{{ tag }}</ion-badge>
   </div>

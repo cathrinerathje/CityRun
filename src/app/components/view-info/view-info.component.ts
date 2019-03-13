@@ -10,6 +10,9 @@ import { PopoverController, NavParams } from '@ionic/angular';
 /** Defines a popover viewport */
 export class ViewInfoComponent implements OnInit {
   sightName: string;
+  originalName: string;
+  description: string;
+  thumbnail: string;
   rating: number;
   tags: Array<string>;
 
@@ -19,6 +22,9 @@ export class ViewInfoComponent implements OnInit {
    */
   constructor(private popController: PopoverController, private navParams: NavParams) {
     this.sightName = navParams.get('name');
+    this.originalName = navParams.get('originalName');
+    this.description = navParams.get('description');
+    this.thumbnail = navParams.get('thumbnail');
     this.rating = navParams.get('rating');
     this.tags = navParams.get('tags');
   }
