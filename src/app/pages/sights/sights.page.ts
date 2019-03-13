@@ -118,7 +118,7 @@ export class SightsPage implements OnInit {
             sight.location.lng,
             sight.perex,
             sight.thumbnail_url,
-            sight.rating,
+            sight.rating.toFixed(2),
             sight.categories
           );
           this.sights.push(formattedSight);
