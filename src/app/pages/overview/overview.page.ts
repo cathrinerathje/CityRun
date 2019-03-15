@@ -200,6 +200,19 @@ export class OverviewPage implements OnInit {
     this.startTracking();
   }
 
+  hideDirectionsPanel($event: any){
+    console.log('called');
+    if ($event.checked == true ){
+      $(document).ready(()=>{
+        $('#directionsPanel').css('display', 'none');
+        });
+    } else {
+      $(document).ready(()=>{
+        $('#directionsPanel').css('display', 'block');
+        });
+    }
+  }
+
   /**
    * @todo
    */

@@ -8,10 +8,11 @@
 </ion-header>
 
 <ion-content padding>
-  <div #map id="map"></div>
+  <div #map id="map">
+  </div>
   <ion-button (click)="endRun()" expand="block" color="danger" class="end-run-button">End run</ion-button>
   <div id="sights">
-    <h5>Distance: {{ distance }} km</h5>
+    <h5>{{ distance }} km <ion-icon color="danger" name="flag"></ion-icon></h5>
     <h5>{{ sights.length }} sights selected:</h5>
     <ion-button (click)="run()" expand="block" color="secondary" class="run-button">Run</ion-button>
     
@@ -26,6 +27,8 @@
       </ion-item>
     </ion-list>
   </div>
+  <h5>Directions: </h5>
+  <ion-toggle checked (click)="hideDirectionsPanel($event)" color="secondary"></ion-toggle>
   <ion-card>
       <ion-card-content>
         <div #directionsPanel></div>
