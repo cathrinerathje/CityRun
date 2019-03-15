@@ -6,6 +6,7 @@ import * as $ from 'jquery';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { Sight } from '../sights/sights.page';
 
 declare var google: any;
 

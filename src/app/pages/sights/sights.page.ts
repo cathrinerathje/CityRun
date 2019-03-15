@@ -64,7 +64,7 @@ export class SightsPage implements OnInit {
    * @param loadingController - To run a spinner while loading the list of sights  
    * @param popoverController - To initiate a popover
    */
-  constructor(public navCtrl: NavProviderService, public sygicPlaces: SygicPlacesService, public googlePlaces: GooglePlacesProviderService, private http: HttpClient, public loadingController: LoadingController, private popoverController: PopoverController) {
+  constructor(public navCtrl: NavProviderService, public sygicPlaces: SygicPlacesService, private http: HttpClient, public loadingController: LoadingController, private popoverController: PopoverController) {
     this.numberOfSightsChecked = 0;
     this.data = [];
     this.sights = [];

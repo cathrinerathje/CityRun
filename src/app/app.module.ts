@@ -26,7 +26,6 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
     StatusBar,
     SplashScreen,
     NavProviderService,
-    GooglePlacesProviderService,
     SygicPlacesService,
     Geolocation,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
