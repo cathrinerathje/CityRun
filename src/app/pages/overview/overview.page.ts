@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NavProviderService } from '../../providers/nav/nav-provider.service';
-import { Sight } from 'src/app/providers/google-places/google-places-provider.service';
 import { ViewInfoComponent } from 'src/app/components/view-info/view-info.component';
 import { PopoverController, NavController } from '@ionic/angular';
 import * as $ from 'jquery'; 

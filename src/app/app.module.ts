@@ -12,7 +12,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 
 import { NavProviderService } from './providers/nav/nav-provider.service';
-import { GooglePlacesProviderService } from './providers/google-places/google-places-provider.service';
 import { SygicPlacesService } from './providers/sygic-places/sygic-places.service';
 
 import { ViewInfoComponent } from '../app/components/view-info/view-info.component';

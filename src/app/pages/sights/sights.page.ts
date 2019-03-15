@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavProviderService } from '../../providers/nav/nav-provider.service';
 import { Observable } from 'rxjs';
-import { GooglePlacesProviderService } from '../../providers/google-places/google-places-provider.service';
 import { SygicPlacesService } from '../../providers/sygic-places/sygic-places.service';
 import { HttpClient } from '@angular/common/http';
 import { LoadingController, PopoverController } from '@ionic/angular';
