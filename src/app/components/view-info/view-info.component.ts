@@ -25,7 +25,6 @@ export class ViewInfoComponent implements OnInit {
     this.originalName = navParams.get('originalName');
     this.description = navParams.get('description');
     this.thumbnail = navParams.get('thumbnail');
-    this.rating = navParams.get('rating');
     this.tags = navParams.get('tags');
   }
 
