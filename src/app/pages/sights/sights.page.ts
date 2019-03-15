@@ -16,6 +16,7 @@ export class Sight{
   description: string;
   thumbnail: string;
   rating: number;
+  markers: string;
   tags: Array<string>;
 
   /**
@@ -27,9 +28,10 @@ export class Sight{
    * @param {string} description
    * @param {string} thumbnail
    * @param {number} rating 
+   * @param {string} markers - List of markers describing the sight
    * @param {Array<string>} tags - List of tags describing the sight 
    */
-  constructor(name: string, originalName: string, lat: number, lng: number, description: string, thumbnail: string, rating: number, tags: Array<string>){
+  constructor(name: string, originalName: string, lat: number, lng: number, description: string, thumbnail: string, rating: number, markers: string, tags: Array<string>){
     this.checked = false;
     this.name = name;
     this.originalName = originalName;
@@ -38,6 +40,7 @@ export class Sight{
     this.description = description;
     this.thumbnail = thumbnail;
     this.rating = rating;
+    this.markers = markers;
     this.tags = tags;
   }
 }
@@ -118,6 +121,7 @@ export class SightsPage implements OnInit {
             sight.perex,
             sight.thumbnail_url,
             sight.rating.toFixed(2),
+            sight.marker,
             sight.categories
           );
           this.sights.push(formattedSight);

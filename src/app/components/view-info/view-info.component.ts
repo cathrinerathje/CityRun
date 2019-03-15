@@ -14,6 +14,7 @@ export class ViewInfoComponent implements OnInit {
   description: string;
   thumbnail: string;
   rating: number;
+  markers: string;
   tags: Array<string>;
 
   /**
@@ -25,10 +26,27 @@ export class ViewInfoComponent implements OnInit {
     this.originalName = navParams.get('originalName');
     this.description = navParams.get('description');
     this.thumbnail = navParams.get('thumbnail');
+    this.markers = navParams.get('markers');
     this.tags = navParams.get('tags');
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.formatMarkers();
+  }
+
+  formatMarkers() {
+    if (this.markers != "") {
+      let splitted = this.markers.split(':');
+      splitted.forEach((marker) => {
+        if (marker != "other") {
+          //no duplicates
+          if (!this.tags.includes(marker)) {
+            this.tags.push(marker);
+          }
+        }
+      });
+    } 
+  }
 
   /** Dismisses the popover when the user closes it */
   close() {
