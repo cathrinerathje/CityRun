@@ -1,17 +1,17 @@
 <ion-content class="popover">
-  <ion-fab>
-    <ion-fab-button (click)="close()" size="small" activated="true"></ion-fab-button>
+  <ion-fab vertical="top" horizontal="start" slot="fixed">
+    <ion-fab-button (click)="close()" size="small">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-fab-button>
   </ion-fab>
-  <div>
-    <img src="{{ thumbnail }}">
-  </div>
-  <h4>{{ sightName }} ({{ originalName }})</h4>
-  <p>
-    Rating: {{ rating }}
-  </p>
-  <p>{{ description }}</p>
-  <div class="badges">
-    <ion-badge class="badge" color="secondary" *ngFor="let tag of tags">{{ tag }}</ion-badge>
+  <div class="img" [ngStyle]="{'background-image':'url('+thumbnail+')'}"></div>
+  <div class="text-box">
+    <h4>{{ sightName }}</h4>
+    <h5>{{ originalName }}</h5>
+    <p>{{ description }}</p>
+    <div class="badges">
+      <ion-badge class="badge" color="secondary" *ngFor="let tag of tags">{{ tag }}</ion-badge>
+    </div>
   </div>
 </ion-content>
   

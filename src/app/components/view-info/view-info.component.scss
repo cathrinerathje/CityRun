@@ -2,18 +2,22 @@
     padding: 15px;
 }
 
-h4 h5 {
-    margin: 0px;
-    margin-top: 10px;
-    margin-left: 10px;
+.img {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 150px;
 }
 
-p {
-    margin-left: 10px;
+.text-box {
+    padding: 10px;
+}
+
+h5 {
+    margin-top: 0px;
 }
 
 .badges {
-    margin-left: 10px;
     margin-bottom: 10px;
 }
 
@@ -23,13 +27,10 @@ p {
 }
 
 ion-icon {
-    align-self: center;
-    margin-left: 10px;
-    margin-right: 10px;
     font-size: 25px;
 }
 
 ion-fab {
-    top: -20px;
-    right: -20px;
+    top: -2px;
+    left: -2px;
 }

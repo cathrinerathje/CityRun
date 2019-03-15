@@ -1,6 +1,15 @@
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
 
+ion-popover {
+  .popover-wrapper{
+    .popover-content{
+      width: 70%;
+      max-height: 70%;
+    }
+  }
+}
+
 /** Ionic CSS Variables **/
 :root {
   --ion-background-color: var(--ion-color-tertiary-tint);
