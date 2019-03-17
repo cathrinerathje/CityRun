@@ -8,10 +8,6 @@
     width: 100%;
 }
 
-.scroll {
-    height: 100%;
-}
-
 #directionsPanel{
     position: absolute;
     z-index: 1;
@@ -35,5 +31,12 @@ ion-card-content {
     width: 90%;
     display: none;
     z-index: 1000;
+}
+
+.fab {
+    display: none;
+    position: absolute;
+    right: 0px;
+    top: 180px;
 }
 

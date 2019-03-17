@@ -38,6 +38,7 @@ export class OverviewPage implements OnInit {
   destination: any;
   distance: string;
   map: any;
+  directionsHidden: boolean;
 
   positionSubscription: Subscription;
   trackedRoute = [];
@@ -48,8 +49,7 @@ export class OverviewPage implements OnInit {
 
   /** Uses NavProviderService to retrieve data from previous page and PopoverController to initiate a popover */
   constructor(public navProvider: NavProviderService, private popoverController: PopoverController, private geolocation: Geolocation, private navCtrl: NavController) { 
-    this.waypoints= [];
-    this.sights = this.navProvider.get();
+    
   }
   
   /**
@@ -57,6 +57,9 @@ export class OverviewPage implements OnInit {
    * When constructWaypoints() resolves, loadMap() and startNavigation() executes asynchronously. 
    */
   ngOnInit() {
+    this.waypoints= [];
+    this.sights = this.navProvider.get();
+    this.directionsHidden = false;
     this.getCurrentPosition().then(()=>{
       this.constructWaypoints().then(() =>{      
         this.loadMap();
@@ -188,27 +191,42 @@ export class OverviewPage implements OnInit {
   run(){
     $(document).ready(()=>{
       $('#sights').hide();
+      $('#directions-header').hide();
+      $('ion-toggle').hide();
       $('#map').css('height', '100%');
       $('ion-card').css({'max-height': '200px', 'overflow': 'scroll', 'position': 'absolute', 'z-index': '100', 'top': '0px', 'left': '0px', 'background': 'var(--ion-color-tertiary-tint)'});
       $('.end-run-button').css('display', 'block');
-      //let endRunButton = document.createElement("ion-button");
-      //$('ion-content').append(endRunButton);
-      //$(endRunButton).text('End run'); 
-      //$(endRunButton).css({'position': 'fixed', 'bottom': '20px', 'width': '90%', 'z-index': '1000', 'background': 'red' }); //color': '#fc4a1a
-      //$(endRunButton).attr({'click': 'endRun()', 'expand': 'block'});
+      $('.fab').show();
     });
     this.startTracking();
   }
 
-  hideDirectionsPanel($event: any){
-    console.log('called');
-    if ($event.checked == true ){
+  toggleDirections() {
+    if (!this.directionsHidden) {
+      $(document).ready(() => {
+        $('ion-card').hide();
+        $('.up-icon').attr('name', 'arrow-dropdown');
+        $('.fab').css('top', '0px');
+        this.directionsHidden = true;
+      });
+    } else {
+      $(document).ready(() => {
+        $('ion-card').show();
+        $('.up-icon').attr('name', 'arrow-dropup');
+        $('.fab').css('top', '180px');
+        this.directionsHidden = false;
+      });
+    }
+  }
+
+  hideDirectionsPanel(event: any){
+    if (event.target.checked){
       $(document).ready(()=>{
-        $('#directionsPanel').css('display', 'none');
+        $('ion-card').hide();
         });
     } else {
       $(document).ready(()=>{
-        $('#directionsPanel').css('display', 'block');
+        $('ion-card').show();
         });
     }
   }
@@ -259,10 +277,11 @@ export class OverviewPage implements OnInit {
       this.positionSubscription.unsubscribe();
       this.currentMapTrack.setMap(null);
       console.log('tracking stopped');
+
       //reload overview page
+      this.ngOnInit();
+      window.location.reload();
       //this.navCtrl.setRoot(this.navCtrl.getActive().component);
     }
-
-
   }
 }

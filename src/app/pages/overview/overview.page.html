@@ -10,6 +10,7 @@
 <ion-content padding>
   <div #map id="map">
   </div>
+
   <ion-button (click)="endRun()" expand="block" color="danger" class="end-run-button">End run</ion-button>
   <div id="sights">
     <h5>{{ distance }} km <ion-icon color="danger" name="flag"></ion-icon></h5>
@@ -27,12 +28,20 @@
       </ion-item>
     </ion-list>
   </div>
-  <h5>Directions: </h5>
+  <h5 id="directions-header">Directions: </h5>
   <ion-toggle checked (click)="hideDirectionsPanel($event)" color="secondary"></ion-toggle>
+  
   <ion-card>
       <ion-card-content>
-        <div #directionsPanel></div>
+        <div #directionsPanel>
+        </div>
       </ion-card-content>
   </ion-card>
+
+  <ion-fab class="fab" vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="toggleDirections()">
+      <ion-icon class="up-icon" name="arrow-dropup"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
   
 </ion-content>
