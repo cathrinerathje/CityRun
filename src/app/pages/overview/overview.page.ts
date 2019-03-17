@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NavProviderService } from '../../providers/nav/nav-provider.service';
 import { ViewInfoComponent } from 'src/app/components/view-info/view-info.component';
-import { PopoverController, NavController } from '@ionic/angular';
+import { PopoverController, NavController, AlertController } from '@ionic/angular';
 import * as $ from 'jquery'; 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Subscription } from 'rxjs';
@@ -38,7 +38,7 @@ export class OverviewPage implements OnInit {
   destination: any;
   distance: string;
   map: any;
-  directionsHidden: boolean;
+  directionsHidden: boolean = false;
 
   positionSubscription: Subscription;
   trackedRoute = [];
@@ -48,8 +48,9 @@ export class OverviewPage implements OnInit {
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
 
   /** Uses NavProviderService to retrieve data from previous page and PopoverController to initiate a popover */
-  constructor(public navProvider: NavProviderService, private popoverController: PopoverController, private geolocation: Geolocation, private navCtrl: NavController) { 
-    
+  constructor(public navProvider: NavProviderService, private popoverController: PopoverController, private geolocation: Geolocation, private navCtrl: NavController, public alertController: AlertController) { 
+    this.waypoints = [];
+    this.sights = this.navProvider.get();
   }
   
   /**
@@ -57,16 +58,12 @@ export class OverviewPage implements OnInit {
    * When constructWaypoints() resolves, loadMap() and startNavigation() executes asynchronously. 
    */
   ngOnInit() {
-    this.waypoints= [];
-    this.sights = this.navProvider.get();
-    this.directionsHidden = false;
     this.getCurrentPosition().then(()=>{
       this.constructWaypoints().then(() =>{      
         this.loadMap();
         this.startNavigation();
       });
     });
-    
   }
   /**
    * @todo
@@ -266,22 +263,47 @@ export class OverviewPage implements OnInit {
       });
       this.currentMapTrack.setMap(this.map);
     }
-
   }
+
+  async stopTrackingAlert() {
+    const alert = await this.alertController.create({
+      header: 'Stop tracking?',
+      message: 'Are you sure you want to stop tracking?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {}
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.endRun();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
   /**
    * @todo
    */
   endRun(){
-    let answer = confirm("Are you sure you want to stop tracking?");
-    if(answer){
-      this.positionSubscription.unsubscribe();
-      this.currentMapTrack.setMap(null);
-      console.log('tracking stopped');
+    this.positionSubscription.unsubscribe();
+    this.currentMapTrack.setMap(null);
+    console.log('tracking stopped');
 
-      //reload overview page
-      this.ngOnInit();
-      window.location.reload();
-      //this.navCtrl.setRoot(this.navCtrl.getActive().component);
-    }
+    //reload overview page
+    this.ngOnInit();
+    $(document).ready(()=>{
+      $('#sights').show();
+      $('#directions-header').show();
+      $('ion-toggle').show();
+      $('#map').css('height', '70%');
+      $('ion-card').css({'top': '', 'left': ''});
+      $('.end-run-button').css('display', 'none');
+      $('.fab').hide();
+    });
   }
 }
