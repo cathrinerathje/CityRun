@@ -39,10 +39,6 @@ export class OverviewPage implements OnInit {
   distance: string;
   map: any;
   directionsHidden: boolean = false;
-  currentLat: any;
-  currentLng: any;
-  marker: any;
-  isTracking: boolean;
 
   positionSubscription: Subscription;
   trackedRoute = [];
@@ -85,18 +81,6 @@ export class OverviewPage implements OnInit {
       });
     });
   }
-
-  /* trackMe() {
-    console.log('trackMe called');
-    if (navigator.geolocation) {
-      this.isTracking = true;
-      navigator.geolocation.watchPosition((position) => {
-        this.showTrackingPosition(position);
-      });
-    } else {
-      alert("Geolocation is not supported by this browser.");
-    }
-  } */
 
   /**
    * @todo 
@@ -168,13 +152,13 @@ export class OverviewPage implements OnInit {
           this.distance = this.calculateDistance(legs);
 
           //Create start/end location marker
-          /* let startMarker = new google.maps.Marker({
+          let startMarker = new google.maps.Marker({
             position: this.origin,
             map: this.map
           });
 
           let label: string = 'Start/end location';
-          this.addInfoWindow(startMarker, label); */
+          this.addInfoWindow(startMarker, label);
 
           //Create markers for all waypoints
           this.addMarkers();
@@ -184,26 +168,6 @@ export class OverviewPage implements OnInit {
       }
     });
   }
-
-  /* showTrackingPosition(position) {
-    console.log(`tracking postion:  ${position.coords.latitude} - ${position.coords.longitude}`);
-    this.currentLat = position.coords.latitude;
-    this.currentLng = position.coords.longitude;
-
-    let location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    this.map.panTo(location);
-
-    if (!this.marker) {
-      this.marker = new google.maps.Marker({
-        position: location,
-        map: this.map,
-        title: 'Got you!'
-      });
-    }
-    else {
-      this.marker.setPosition(location);
-    }
-  } */
 
   addMarkers() {
     this.sights.map((sight) => {
@@ -292,17 +256,21 @@ export class OverviewPage implements OnInit {
    * @todo
    */
   startTracking(){
-    this.positionSubscription = this.geolocation.watchPosition()
+    let marker  = new google.maps.Marker({
+      position: this.origin,
+      map: this.map
+    });
+    let label: string = 'Current position';
+    this.addInfoWindow(marker, label);
+
+    this.positionSubscription = this.geolocation.watchPosition({
+      enableHighAccuracy: true
+    })
     .pipe(
       filter((p)=> p.coords !== undefined)
     )
     .subscribe(data =>{
-      let marker = new google.maps.Marker({
-        position: new google.maps.LatLng(data.coords.latitude, data.coords.longitude),
-        map: this.map
-      });
-      //marker.setPosition({lat: data.coords.latitude, lng: data.coords.longitude});
-      //this.map.panTo({lat: data.coords.latitude, lng: data.coords.longitude});
+      marker.setPosition({lat: data.coords.latitude, lng: data.coords.longitude});
       
       setTimeout(()=>{
         this.trackedRoute.push({lat: data.coords.latitude, lng: data.coords.longitude});
@@ -312,33 +280,7 @@ export class OverviewPage implements OnInit {
     this.map.setCenter(this.origin);
     this.map.setZoom(20);
 
-    //this.watchPosition();
   }
-
-  /* watchPosition() {
-    var myMarker = null;
-
-    // get current position
-    navigator.geolocation.getCurrentPosition(showPosition);
-
-    // show current position on map
-    function showPosition(position) {
-      myMarker = new google.maps.Marker({
-          position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-          map: this.map
-      });
-    }
-
-    // watch user's position
-    navigator.geolocation.watchPosition(watchSuccess);
-
-    // change marker location everytime position is updated
-    function watchSuccess(position) {
-        var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        // set marker position
-        this.marker.setPosition(latLng);
-    }
-  } */
 
   /**
    * @todo
