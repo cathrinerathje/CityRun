@@ -39,6 +39,10 @@ export class OverviewPage implements OnInit {
   distance: string;
   map: any;
   directionsHidden: boolean = false;
+  currentLat: any;
+  currentLng: any;
+  marker: any;
+  isTracking: boolean;
 
   positionSubscription: Subscription;
   trackedRoute = [];
@@ -80,9 +84,20 @@ export class OverviewPage implements OnInit {
         reject();
       });
     });
-    
-
   }
+
+  /* trackMe() {
+    console.log('trackMe called');
+    if (navigator.geolocation) {
+      this.isTracking = true;
+      navigator.geolocation.watchPosition((position) => {
+        this.showTrackingPosition(position);
+      });
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  } */
+
   /**
    * @todo 
    * Constructs an array of Waypoints by mapping over each selected sight and extracting its location.
@@ -127,7 +142,10 @@ export class OverviewPage implements OnInit {
    */
   startNavigation() {
     let directionsService = new google.maps.DirectionsService;
-    let directionsDisplay = new google.maps.DirectionsRenderer;
+    let directionsDisplay = new google.maps.DirectionsRenderer({
+      //Remove all default markers
+      suppressMarkers: true
+    });
 
     directionsDisplay.setMap(this.map);
     directionsDisplay.setPanel(this.directionsPanel.nativeElement);
@@ -149,9 +167,63 @@ export class OverviewPage implements OnInit {
           console.log(legs);
           this.distance = this.calculateDistance(legs);
 
+          //Create start/end location marker
+          /* let startMarker = new google.maps.Marker({
+            position: this.origin,
+            map: this.map
+          });
+
+          let label: string = 'Start/end location';
+          this.addInfoWindow(startMarker, label); */
+
+          //Create markers for all waypoints
+          this.addMarkers();
+
       } else {
           console.warn(status);
       }
+    });
+  }
+
+  /* showTrackingPosition(position) {
+    console.log(`tracking postion:  ${position.coords.latitude} - ${position.coords.longitude}`);
+    this.currentLat = position.coords.latitude;
+    this.currentLng = position.coords.longitude;
+
+    let location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    this.map.panTo(location);
+
+    if (!this.marker) {
+      this.marker = new google.maps.Marker({
+        position: location,
+        map: this.map,
+        title: 'Got you!'
+      });
+    }
+    else {
+      this.marker.setPosition(location);
+    }
+  } */
+
+  addMarkers() {
+    this.sights.map((sight) => {
+      let marker = new google.maps.Marker({
+        position: new google.maps.LatLng(sight.lat, sight.lng),
+        map: this.map
+      });
+
+      let label: string = sight.name;
+      this.addInfoWindow(marker, label);
+    });
+  }
+
+  addInfoWindow(marker, label){
+    let infoWindow = new google.maps.InfoWindow({
+      content: label
+    });
+
+    google.maps.event.addListener(marker, 'click', () => {
+      infoWindow.open(this.map, marker);
     });
   }
 
@@ -229,8 +301,37 @@ export class OverviewPage implements OnInit {
         this.trackedRoute.push({lat: data.coords.latitude, lng: data.coords.longitude});
         this.redrawPath(this.trackedRoute);
       }, 0);
-    })
+    });
+    this.map.setCenter(this.origin);
+    this.map.setZoom(20);
+
+    //this.watchPosition();
   }
+
+  /* watchPosition() {
+    var myMarker = null;
+
+    // get current position
+    navigator.geolocation.getCurrentPosition(showPosition);
+
+    // show current position on map
+    function showPosition(position) {
+      myMarker = new google.maps.Marker({
+          position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+          map: this.map
+      });
+    }
+
+    // watch user's position
+    navigator.geolocation.watchPosition(watchSuccess);
+
+    // change marker location everytime position is updated
+    function watchSuccess(position) {
+        var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        // set marker position
+        this.marker.setPosition(latLng);
+    }
+  } */
 
   /**
    * @todo
@@ -247,7 +348,7 @@ export class OverviewPage implements OnInit {
         geodesic: true,
         strokeColor: '#ff00ff',
         strokeOpacity: 1.0,
-        strokeWeight: 3
+        strokeWeight: 5
       });
       this.currentMapTrack.setMap(this.map);
     }
@@ -259,12 +360,12 @@ export class OverviewPage implements OnInit {
       message: 'Are you sure you want to stop tracking?',
       buttons: [
         {
-          text: 'Cancel',
+          text: 'No',
           role: 'cancel',
           handler: () => {}
         },
         {
-          text: 'OK',
+          text: 'Yes',
           handler: () => {
             this.endRun();
           }
