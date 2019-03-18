@@ -148,12 +148,15 @@ export class OverviewPage implements OnInit {
           
           //Calculate route distance
           let legs = res.routes[0].legs;
-          console.log(legs);
           this.distance = this.calculateDistance(legs);
 
           //Create start/end location marker
           let startMarker = new google.maps.Marker({
             position: this.origin,
+            icon: {
+              url: '../../../assets/icon/position.png',
+              scaledSize: new google.maps.Size(35, 35)
+            },
             map: this.map
           });
 
@@ -173,6 +176,10 @@ export class OverviewPage implements OnInit {
     this.sights.map((sight) => {
       let marker = new google.maps.Marker({
         position: new google.maps.LatLng(sight.lat, sight.lng),
+        icon: {
+          url: '../../../assets/icon/point_of_interest.png',
+          scaledSize: new google.maps.Size(45, 45)
+        },
         map: this.map
       });
 
@@ -258,6 +265,10 @@ export class OverviewPage implements OnInit {
   startTracking(){
     let marker  = new google.maps.Marker({
       position: this.origin,
+      icon: {
+        url: '../../../assets/icon/current_position.png',
+        scaledSize: new google.maps.Size(45, 45)
+      },
       map: this.map
     });
     let label: string = 'Current position';
@@ -295,9 +306,9 @@ export class OverviewPage implements OnInit {
       this.currentMapTrack = new google.maps.Polyline({
         path: path,
         geodesic: true,
-        strokeColor: '#ff00ff',
+        strokeColor: '#e0b500',
         strokeOpacity: 1.0,
-        strokeWeight: 5
+        strokeWeight: 10
       });
       this.currentMapTrack.setMap(this.map);
     }
@@ -324,6 +335,15 @@ export class OverviewPage implements OnInit {
     await alert.present();
   }
 
+  async trackingEndedAlert() {
+    const alert = await this.alertController.create({
+      header: 'Run ended',
+      message: 'You have completed a run!',
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
   /**
    * @todo
    */
@@ -343,5 +363,6 @@ export class OverviewPage implements OnInit {
       $('.end-run-button').css('display', 'none');
       $('.fab').hide();
     });
+    this.trackingEndedAlert();
   }
 }
