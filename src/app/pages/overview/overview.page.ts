@@ -297,6 +297,13 @@ export class OverviewPage implements OnInit {
       filter((p)=> p.coords !== undefined)
     )
     .subscribe(data =>{
+      let marker = new google.maps.Marker({
+        position: new google.maps.LatLng(data.coords.latitude, data.coords.longitude),
+        map: this.map
+      });
+      //marker.setPosition({lat: data.coords.latitude, lng: data.coords.longitude});
+      //this.map.panTo({lat: data.coords.latitude, lng: data.coords.longitude});
+      
       setTimeout(()=>{
         this.trackedRoute.push({lat: data.coords.latitude, lng: data.coords.longitude});
         this.redrawPath(this.trackedRoute);
