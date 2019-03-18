@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewInfoPage } from './view-info.page';
+import { ViewInfoComponent } from './view-info.component';
 
 describe('ViewInfoPage', () => {
-  let component: ViewInfoPage;
-  let fixture: ComponentFixture<ViewInfoPage>;
+  let component: ViewInfoComponent;
+  let fixture: ComponentFixture<ViewInfoComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ViewInfoPage ],
+      declarations: [ ViewInfoComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ViewInfoPage);
+    fixture = TestBed.createComponent(ViewInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
