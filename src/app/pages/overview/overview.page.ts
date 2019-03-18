@@ -216,18 +216,6 @@ export class OverviewPage implements OnInit {
     }
   }
 
-  hideDirectionsPanel(event: any){
-    if (event.target.checked){
-      $(document).ready(()=>{
-        $('ion-card').hide();
-        });
-    } else {
-      $(document).ready(()=>{
-        $('ion-card').show();
-        });
-    }
-  }
-
   /**
    * @todo
    */
