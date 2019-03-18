@@ -20,7 +20,8 @@
     <ion-list>
       <ion-item *ngFor="let sight of sights">
         <ion-label>
-          {{ sight.name }}
+          <h3>{{ sight.name }}</h3>
+          <p>{{ sight.originalName }}</p>
         </ion-label>
         <div class="view-button">
           <ion-button (click)="viewInfo(sight)" item-end fill="clear" color="primary">View</ion-button>
