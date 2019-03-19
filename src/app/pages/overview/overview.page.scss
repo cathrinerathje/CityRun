@@ -40,3 +40,19 @@ ion-card-content {
     top: 180px;
 }
 
+.top-info{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.position-icon{
+    width: 20px;
+    height: 20px;
+}
+
+.point-of-interest-icon{
+    width: 35px;
+    height: 35px;
+}
+
