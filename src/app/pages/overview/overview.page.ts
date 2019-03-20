@@ -7,6 +7,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Sight } from '../sights/sights.page';
+import { Geofence } from '@ionic-native/geofence/ngx';
+import { CompileShallowModuleMetadata } from '@angular/compiler';
 
 declare var google: any;
 
@@ -48,9 +50,15 @@ export class OverviewPage implements OnInit {
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
 
   /** Uses NavProviderService to retrieve data from previous page and PopoverController to initiate a popover */
-  constructor(public navProvider: NavProviderService, private popoverController: PopoverController, private geolocation: Geolocation, private navCtrl: NavController, public alertController: AlertController) { 
+  constructor(public navProvider: NavProviderService, private popoverController: PopoverController, private geolocation: Geolocation, private navCtrl: NavController, public alertController: AlertController, private geofence: Geofence) { 
     this.waypoints = [];
     this.sights = this.navProvider.get();
+    geofence.initialize().then(()=>{
+      console.log('geofence plugin ready'),
+      (err)=>{
+        console.log(err);
+      }
+    });
   }
   
   /**
@@ -290,6 +298,13 @@ export class OverviewPage implements OnInit {
     });
     this.map.setCenter(this.origin);
     this.map.setZoom(20);
+    
+    
+    this.testAddGeofence();
+    /* 
+    this.sights.map((sight, index)=>{
+      this.addGeofence(sight, index)
+    }) */
 
   }
 
@@ -365,4 +380,56 @@ export class OverviewPage implements OnInit {
     });
     this.trackingEndedAlert();
   }
+
+  /*
+  private addGeofence(sight: Sight, id: number){
+    let fence ={
+      id: id,
+      latitude: sight.lat,
+      longitude: sight.lng,
+      radius: 100,
+      transitionType: 1,
+      notification: {
+        id: id,
+        title: 'You crossed a sight',
+        text: 'You just arrived at '+ sight.name,
+        openAppOnClick: true
+      }
+
+    }
+    this.geofence.addOrUpdate(fence).then(()=>{
+      console.log('geofence added'),
+      (err) =>{
+        console.log('geofence failed to add')
+      }
+    });
+
+  }
+  */
+
+  private testAddGeofence(){
+    let fence ={
+      id: 1234,
+      latitude: 55.660300,
+      longitude: 12.592840,
+      radius: 50,
+      transitionType: 1,
+      notification: {
+        id: 1,
+        title: 'You crossed a sight',
+        text: 'You just arrived at netto',
+        openAppOnClick: true
+      }
+
+    }
+    this.geofence.addOrUpdate(fence).then(()=>{
+      console.log('geofence added'),
+      (err) =>{
+        console.log('geofence failed to add')
+      }
+    });
+
+  }
+
+
 }

@@ -17,6 +17,7 @@ import { SygicPlacesService } from './providers/sygic-places/sygic-places.servic
 import { ViewInfoComponent } from '../app/components/view-info/view-info.component';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Geofence } from '@ionic-native/geofence/ngx';
 
 @NgModule({
   declarations: [AppComponent, ViewInfoComponent],
@@ -28,6 +29,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
     NavProviderService,
     SygicPlacesService,
     Geolocation,
+    Geofence,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
