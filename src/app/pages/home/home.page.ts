@@ -15,7 +15,10 @@ export class HomePage {
    * Uses a router to navigate to other pages.
    * @param {Router} router - The router used to navigate forward.
    */
-  constructor(private router: Router, private tts: TextToSpeech) {}
+  constructor(private router: Router, private tts: TextToSpeech) {
+
+    this.speech();
+  }
   
   /** Navigates to sights page when ion-card is clicked */
   navigateToSightsPage() {
@@ -23,7 +26,11 @@ export class HomePage {
   }
 
   speech() {
-    this.tts.speak('Hello World')
+    this.tts.speak({
+      text: 'Velkommen til city run! Dette er en kombineret løbe og sightseeing app. Håber du kan lide den',
+      locale: 'da-DK'
+    })
+  
     .then(() => console.log('Success'))
     .catch((reason: any) => console.log(reason));
   }
