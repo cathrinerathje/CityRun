@@ -282,6 +282,7 @@ export class OverviewPage implements OnInit {
     )
     .subscribe(data =>{
       marker.setPosition({lat: data.coords.latitude, lng: data.coords.longitude});
+      this.map.setCenter({lat: data.coords.latitude, lng: data.coords.longitude});
       
       setTimeout(()=>{
         this.trackedRoute.push({lat: data.coords.latitude, lng: data.coords.longitude});
@@ -358,6 +359,7 @@ export class OverviewPage implements OnInit {
       $('#sights').show();
       $('#directions-header').show();
       $('ion-toggle').show();
+      $('ion-card').show();
       $('#map').css('height', '70%');
       $('ion-card').css({'top': '', 'left': ''});
       $('.end-run-button').css('display', 'none');
