@@ -8,7 +8,6 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Sight } from '../sights/sights.page';
 import { Geofence } from '@ionic-native/geofence/ngx';
-import { CompileShallowModuleMetadata } from '@angular/compiler';
 
 declare var google: any;
 
@@ -174,6 +173,13 @@ export class OverviewPage implements OnInit {
           //Create markers for all waypoints
           this.addMarkers();
 
+          //add geofencing 
+          this.testAddGeofence();
+          /* 
+          this.sights.map((sight, index)=>{
+            this.addGeofence(sight, index)
+          }) */
+
       } else {
           console.warn(status);
       }
@@ -301,7 +307,7 @@ export class OverviewPage implements OnInit {
     this.map.setZoom(20);
     
     
-    this.testAddGeofence();
+    //this.testAddGeofence();
     /* 
     this.sights.map((sight, index)=>{
       this.addGeofence(sight, index)
@@ -412,15 +418,15 @@ export class OverviewPage implements OnInit {
   private testAddGeofence(){
     let fence ={
       id: '123abc',
-      latitude: 55.660300,
-      longitude: 12.592840,
-      radius: 500,
-      transitionType: 1,
+      latitude: this.origin.lat(),
+      longitude: this.origin.lng(),
+      radius: 10,
+      transitionType: 3,
       notification: {
         id: 1,
         title: 'You crossed a sight',
         text: 'You just arrived at netto',
-        vibration: [2000],
+        vibrate: [2000, 500, 2000],
         openAppOnClick: true
       }
 
