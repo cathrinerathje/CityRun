@@ -172,9 +172,10 @@ export class OverviewPage implements OnInit {
 
           //Create markers for all waypoints
           this.addMarkers();
-
+          console.log('lat '+ this.origin.lat());
+          console.log('lng ' +this.origin.lng());
           //add geofencing 
-          this.testAddGeofence();
+          //this.testAddGeofence();
           /* 
           this.sights.map((sight, index)=>{
             this.addGeofence(sight, index)
@@ -307,7 +308,7 @@ export class OverviewPage implements OnInit {
     this.map.setZoom(20);
     
     
-    //this.testAddGeofence();
+    this.testAddGeofence();
     /* 
     this.sights.map((sight, index)=>{
       this.addGeofence(sight, index)
@@ -418,8 +419,8 @@ export class OverviewPage implements OnInit {
   private testAddGeofence(){
     let fence ={
       id: '123abc',
-      latitude: this.origin.lat(),
-      longitude: this.origin.lng(),
+      latitude: 55.663102,
+      longitude: 12.590352,
       radius: 10,
       transitionType: 3,
       notification: {
