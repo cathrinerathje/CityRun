@@ -18,6 +18,7 @@ import { ViewInfoComponent } from '../app/components/view-info/view-info.compone
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Geofence } from '@ionic-native/geofence/ngx';
+import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 
 @NgModule({
   declarations: [AppComponent, ViewInfoComponent],
@@ -30,6 +31,7 @@ import { Geofence } from '@ionic-native/geofence/ngx';
     SygicPlacesService,
     Geolocation,
     Geofence,
+    TextToSpeech,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
