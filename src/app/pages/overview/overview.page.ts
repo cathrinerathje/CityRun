@@ -411,15 +411,16 @@ export class OverviewPage implements OnInit {
 
   private testAddGeofence(){
     let fence ={
-      id: 1234,
+      id: '123abc',
       latitude: 55.660300,
       longitude: 12.592840,
-      radius: 50,
+      radius: 500,
       transitionType: 1,
       notification: {
         id: 1,
         title: 'You crossed a sight',
         text: 'You just arrived at netto',
+        vibration: [2000],
         openAppOnClick: true
       }
 
