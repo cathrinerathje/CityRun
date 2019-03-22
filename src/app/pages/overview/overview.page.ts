@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Sight } from '../sights/sights.page';
 import { Geofence } from '@ionic-native/geofence/ngx';
+import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 
 declare var google: any;
 
@@ -49,7 +50,7 @@ export class OverviewPage implements OnInit {
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
 
   /** Uses NavProviderService to retrieve data from previous page and PopoverController to initiate a popover */
-  constructor(public navProvider: NavProviderService, private popoverController: PopoverController, private geolocation: Geolocation, private navCtrl: NavController, public alertController: AlertController, private geofence: Geofence) { 
+  constructor(public navProvider: NavProviderService, private popoverController: PopoverController, private geolocation: Geolocation, private navCtrl: NavController, public alertController: AlertController, private geofence: Geofence, private tts: TextToSpeech) { 
     this.waypoints = [];
     this.sights = this.navProvider.get();
     geofence.initialize().then(()=>{
@@ -308,12 +309,12 @@ export class OverviewPage implements OnInit {
     this.map.setZoom(20);
     
     
-    this.testAddGeofence();
-    /* 
+    //this.testAddGeofence();
+     
     this.sights.map((sight, index)=>{
       this.addGeofence(sight, index)
-    }) */
-
+    });
+    this.testAddGeofence();
   }
 
   /**
@@ -390,14 +391,14 @@ export class OverviewPage implements OnInit {
     this.trackingEndedAlert();
   }
 
-  /*
+  
   private addGeofence(sight: Sight, id: number){
-    let fence ={
-      id: id,
+    let fence = {
+      id: '' + id,
       latitude: sight.lat,
       longitude: sight.lng,
-      radius: 100,
-      transitionType: 1,
+      radius: 1000,
+      transitionType: 3,
       notification: {
         id: id,
         title: 'You crossed a sight',
@@ -412,21 +413,24 @@ export class OverviewPage implements OnInit {
         console.log('geofence failed to add')
       }
     });
+     this.geofence.onTransitionReceived().subscribe((res)=>{
+      this.speech();
+    });
 
   }
-  */
+  
 
   private testAddGeofence(){
     let fence ={
       id: '123abc',
       latitude: 55.663102,
       longitude: 12.590352,
-      radius: 10,
+      radius: 1000,
       transitionType: 3,
       notification: {
         id: 1,
         title: 'You crossed a sight',
-        text: 'You just arrived at netto',
+        text: 'You just arrived',
         vibrate: [2000, 500, 2000],
         openAppOnClick: true
       }
@@ -438,7 +442,20 @@ export class OverviewPage implements OnInit {
         console.log('geofence failed to add')
       }
     });
+    this.geofence.onTransitionReceived().subscribe((res)=>{
+      this.speech();
+    });
+  }
 
+
+  speech() {
+    this.tts.speak({
+      text: 'Velkommen til city run! Dette er en kombineret løbe og sightseeing app. Håber du kan lide den',
+      locale: 'da-DK'
+    })
+  
+    .then(() => console.log('Success'))
+    .catch((reason: any) => console.log(reason));
   }
 
 
