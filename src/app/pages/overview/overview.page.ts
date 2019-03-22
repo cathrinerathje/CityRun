@@ -380,7 +380,6 @@ export class OverviewPage implements OnInit {
     this.trackingEndedAlert();
   }
 
-  
   private addGeofence(sight: Sight, id: number){
     let fence = {
       id: '' + id,
@@ -425,17 +424,14 @@ export class OverviewPage implements OnInit {
         }
       }
     }
-    this.geofence.addOrUpdate(fence).then(()=>{
+    /* this.geofence.addOrUpdate(fence).then(()=>{
       console.log('geofence added'),
       (err) =>{
         console.log('geofence failed to add')
       }
-    });
-    this.geofence.onTransitionReceived().subscribe((res) => {
-      this.testSpeech('Welcome to the ice cream store');
-    });
+    }); */
 
-    /* let fence2 = {
+    let fence2 = {
       id: '1234567sdwn',
       latitude: 55.660207,
       longitude: 12.592828,
@@ -452,31 +448,43 @@ export class OverviewPage implements OnInit {
         }
       }
     }
-    this.geofence.addOrUpdate(fence2).then(()=>{
+    /* this.geofence.addOrUpdate(fence2).then(()=>{
       console.log('geofence added'),
       (err) =>{
         console.log('geofence failed to add')
       }
     }); */
 
-
-
-    /* let fences = [];
+    let fences = [];
     fences.push(fence);
     fences.push(fence2);
 
-    fences.forEach((fence) => {
+    this.geofence.addOrUpdate(fences).then(() => {
+      console.log('geofence added'),
+      (err) =>{
+        console.log('geofence failed to add')
+      }
+    });
+
+    /* this.geofence.onTransitionReceived().subscribe((res) => {
+      res.forEach((fence, index) => {
+        this.testSpeech('fence ' + index + ' reached.');
+      });
+    }); */
+
+    /* fences.forEach((fence) => {
       this.geofence.onTransitionReceived().subscribe((res) => {
+        console.log('res', res);
         this.testSpeech(fence.notification.data.text);
       });
     }); */
 
-    /* this.geofence.onTransitionReceived().subscribe((res)=>{
+    this.geofence.onTransitionReceived().subscribe((res)=>{
       fences.forEach((fence) => {
         this.testSpeech(fence.notification.data.text);
-      })
+      });
       //this.testSpeech('Welcome to Netto');
-    }); */
+    });
   }
 
   testSpeech(text: string) {
@@ -497,6 +505,4 @@ export class OverviewPage implements OnInit {
     .then(() => console.log('Success'))
     .catch((reason: any) => console.log(reason));
   }
-
-
 }
