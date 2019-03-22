@@ -298,12 +298,9 @@ export class OverviewPage implements OnInit {
       }, 0);
     });
     this.map.setCenter(this.origin);
-    this.map.setZoom(20);
-         
-    /* this.sights.map((sight, index)=>{
-      this.addGeofence(sight, index)
-    }); */
-    this.testAddGeofence();
+    this.map.setZoom(18);
+      
+    this.addGeofences();
   }
 
   /**
@@ -321,7 +318,7 @@ export class OverviewPage implements OnInit {
         geodesic: true,
         strokeColor: '#e0b500',
         strokeOpacity: 1.0,
-        strokeWeight: 10
+        strokeWeight: 8
       });
       this.currentMapTrack.setMap(this.map);
     }
@@ -380,29 +377,42 @@ export class OverviewPage implements OnInit {
     this.trackingEndedAlert();
   }
 
-  private addGeofence(sight: Sight, id: number){
-    let fence = {
-      id: '' + id,
-      latitude: sight.lat,
-      longitude: sight.lng,
-      radius: 100,
-      transitionType: 3,
-      notification: {
-        id: id,
-        title: 'You crossed a sight',
-        text: 'You just arrived at '+ sight.name,
-        openAppOnClick: true
-      }
+  private addGeofences(){
+    let fences = [];
 
-    }
-    this.geofence.addOrUpdate(fence).then(()=>{
+    this.sights.map((sight, index) => {
+      let fence = {
+        id: '' + index,
+        latitude: sight.lat,
+        longitude: sight.lng,
+        radius: 100,
+        transitionType: 1,
+        notification: {
+          id: index,
+          title: 'You crossed a sight',
+          text: 'You just arrived at '+ sight.name,
+          openAppOnClick: true,
+          data: {
+            sightName: sight.name,
+            originalName: sight.originalName,
+            text: sight.description
+          }
+        }
+      }
+      fences.push(fence);
+    });
+
+    this.geofence.addOrUpdate(fences).then(()=>{
       console.log('geofence added'),
       (err) =>{
         console.log('geofence failed to add')
       }
     });
-     this.geofence.onTransitionReceived().subscribe((res)=>{
-      this.speech(sight);
+
+    this.geofence.onTransitionReceived().subscribe((res) => {
+      res.forEach((f) => {
+        this.speech(f);
+      });
     });
   }
   
@@ -424,36 +434,6 @@ export class OverviewPage implements OnInit {
         }
       }
     }
-    /* this.geofence.addOrUpdate(fence).then(()=>{
-      console.log('geofence added'),
-      (err) =>{
-        console.log('geofence failed to add')
-      }
-    }); */
-
-    /* let fence2 = {
-      id: '1234567sdwn',
-      latitude: 55.660207,
-      longitude: 12.592828,
-      radius: 10,
-      transitionType: 3,
-      notification: {
-        id: 1,
-        title: 'You crossed a sight',
-        text: 'You just arrived',
-        vibrate: [2000, 500, 2000],
-        openAppOnClick: true,
-        data: {
-          text: 'Welcome to netto'
-        }
-      }
-    } */
-    /* this.geofence.addOrUpdate(fence2).then(()=>{
-      console.log('geofence added'),
-      (err) =>{
-        console.log('geofence failed to add')
-      }
-    }); */
 
     let fences = [];
     fences.push(fence);
@@ -465,46 +445,16 @@ export class OverviewPage implements OnInit {
         console.log('geofence failed to add')
       }
     });
-
-    /* this.geofence.onTransitionReceived().subscribe((res) => {
-      res.forEach((fence, index) => {
-        this.testSpeech('fence ' + index + ' reached.');
-      });
-    }); */
-
-    /* fences.forEach((fence) => {
-      this.geofence.onTransitionReceived().subscribe((res) => {
-        console.log('res', res);
-        this.testSpeech(fence.notification.data.text);
-      });
-    }); */
-
-    this.geofence.onTransitionReceived().subscribe((res)=>{
-      res.forEach((fence) => {
-        this.testSpeech('this is the response ' + fence);
-      });
-      
-      /* fences.forEach((fence) => {
-        this.testSpeech(fence.notification.data.text + '. Here comes the response ' + res);
-      }); */
-    });
   }
 
-  testSpeech(text: string) {
+  speech(fence: any) {
+    let name = fence.notification.data.sightName;
+    let originalName = fence.notification.data.originalName;
+    let text = fence.notification.data.text;
     this.tts.speak({
-      text: text,
+      text: 'You have arrived at ' + name + '. It is also known as ' + originalName + '. ' + text,
       locale: 'en-GB'
     })
-    .then(() => console.log('Success'))
-    .catch((reason: any) => console.log(reason));
-  }
-
-  speech(sight: Sight) {
-    this.tts.speak({
-      text: sight.description,
-      locale: 'da-DK'
-    })
-  
     .then(() => console.log('Success'))
     .catch((reason: any) => console.log(reason));
   }
