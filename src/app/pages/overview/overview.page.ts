@@ -173,14 +173,6 @@ export class OverviewPage implements OnInit {
 
           //Create markers for all waypoints
           this.addMarkers();
-          console.log('lat '+ this.origin.lat());
-          console.log('lng ' +this.origin.lng());
-          //add geofencing 
-          //this.testAddGeofence();
-          /* 
-          this.sights.map((sight, index)=>{
-            this.addGeofence(sight, index)
-          }) */
 
       } else {
           console.warn(status);
@@ -307,13 +299,10 @@ export class OverviewPage implements OnInit {
     });
     this.map.setCenter(this.origin);
     this.map.setZoom(20);
-    
-    
-    //this.testAddGeofence();
-     
-    this.sights.map((sight, index)=>{
+         
+    /* this.sights.map((sight, index)=>{
       this.addGeofence(sight, index)
-    });
+    }); */
     this.testAddGeofence();
   }
 
@@ -397,7 +386,7 @@ export class OverviewPage implements OnInit {
       id: '' + id,
       latitude: sight.lat,
       longitude: sight.lng,
-      radius: 1000,
+      radius: 100,
       transitionType: 3,
       notification: {
         id: id,
@@ -414,27 +403,27 @@ export class OverviewPage implements OnInit {
       }
     });
      this.geofence.onTransitionReceived().subscribe((res)=>{
-      this.speech();
+      this.speech(sight);
     });
-
   }
   
-
-  private testAddGeofence(){
-    let fence ={
+  private testAddGeofence() {
+    let fence = {
       id: '123abc',
-      latitude: 55.663102,
-      longitude: 12.590352,
-      radius: 1000,
+      latitude: 55.660325,
+      longitude: 12.591427,
+      radius: 10,
       transitionType: 3,
       notification: {
         id: 1,
         title: 'You crossed a sight',
         text: 'You just arrived',
         vibrate: [2000, 500, 2000],
-        openAppOnClick: true
+        openAppOnClick: true,
+        data: {
+          text: 'Welcome to the ice cream store'
+        }
       }
-
     }
     this.geofence.addOrUpdate(fence).then(()=>{
       console.log('geofence added'),
@@ -442,15 +431,66 @@ export class OverviewPage implements OnInit {
         console.log('geofence failed to add')
       }
     });
-    this.geofence.onTransitionReceived().subscribe((res)=>{
-      this.speech();
+    this.geofence.onTransitionReceived().subscribe((res) => {
+      this.testSpeech('Welcome to the ice cream store');
     });
+
+    /* let fence2 = {
+      id: '1234567sdwn',
+      latitude: 55.660207,
+      longitude: 12.592828,
+      radius: 10,
+      transitionType: 3,
+      notification: {
+        id: 1,
+        title: 'You crossed a sight',
+        text: 'You just arrived',
+        vibrate: [2000, 500, 2000],
+        openAppOnClick: true,
+        data: {
+          text: 'Welcome to netto'
+        }
+      }
+    }
+    this.geofence.addOrUpdate(fence2).then(()=>{
+      console.log('geofence added'),
+      (err) =>{
+        console.log('geofence failed to add')
+      }
+    }); */
+
+
+
+    /* let fences = [];
+    fences.push(fence);
+    fences.push(fence2);
+
+    fences.forEach((fence) => {
+      this.geofence.onTransitionReceived().subscribe((res) => {
+        this.testSpeech(fence.notification.data.text);
+      });
+    }); */
+
+    /* this.geofence.onTransitionReceived().subscribe((res)=>{
+      fences.forEach((fence) => {
+        this.testSpeech(fence.notification.data.text);
+      })
+      //this.testSpeech('Welcome to Netto');
+    }); */
   }
 
-
-  speech() {
+  testSpeech(text: string) {
     this.tts.speak({
-      text: 'Velkommen til city run! Dette er en kombineret løbe og sightseeing app. Håber du kan lide den',
+      text: text,
+      locale: 'en-GB'
+    })
+    .then(() => console.log('Success'))
+    .catch((reason: any) => console.log(reason));
+  }
+
+  speech(sight: Sight) {
+    this.tts.speak({
+      text: sight.description,
       locale: 'da-DK'
     })
   
