@@ -481,9 +481,8 @@ export class OverviewPage implements OnInit {
 
     this.geofence.onTransitionReceived().subscribe((res)=>{
       fences.forEach((fence) => {
-        this.testSpeech(fence.notification.data.text);
+        this.testSpeech(fence.notification.data.text + '. Here comes the response ' + res);
       });
-      //this.testSpeech('Welcome to Netto');
     });
   }
 
