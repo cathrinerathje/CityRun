@@ -411,7 +411,7 @@ export class OverviewPage implements OnInit {
       id: '123abc',
       latitude: 55.660325,
       longitude: 12.591427,
-      radius: 10,
+      radius: 1000,
       transitionType: 3,
       notification: {
         id: 1,
@@ -431,7 +431,7 @@ export class OverviewPage implements OnInit {
       }
     }); */
 
-    let fence2 = {
+    /* let fence2 = {
       id: '1234567sdwn',
       latitude: 55.660207,
       longitude: 12.592828,
@@ -447,7 +447,7 @@ export class OverviewPage implements OnInit {
           text: 'Welcome to netto'
         }
       }
-    }
+    } */
     /* this.geofence.addOrUpdate(fence2).then(()=>{
       console.log('geofence added'),
       (err) =>{
@@ -457,9 +457,9 @@ export class OverviewPage implements OnInit {
 
     let fences = [];
     fences.push(fence);
-    fences.push(fence2);
+    //fences.push(fence2);
 
-    this.geofence.addOrUpdate(fences).then(() => {
+    this.geofence.addOrUpdate(fence).then(() => {
       console.log('geofence added'),
       (err) =>{
         console.log('geofence failed to add')
@@ -480,9 +480,13 @@ export class OverviewPage implements OnInit {
     }); */
 
     this.geofence.onTransitionReceived().subscribe((res)=>{
-      fences.forEach((fence) => {
-        this.testSpeech(fence.notification.data.text + '. Here comes the response ' + res);
+      res.forEach((fence) => {
+        this.testSpeech('this is the response ' + fence);
       });
+      
+      /* fences.forEach((fence) => {
+        this.testSpeech(fence.notification.data.text + '. Here comes the response ' + res);
+      }); */
     });
   }
 
