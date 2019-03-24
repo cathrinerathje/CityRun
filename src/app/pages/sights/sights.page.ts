@@ -58,6 +58,7 @@ export class SightsPage implements OnInit {
 
   data: any;
   sights: Array<Sight>;
+  searchedSights: Array<Sight>;
 
   /**
    * Uses the following params: 
@@ -71,6 +72,7 @@ export class SightsPage implements OnInit {
     this.numberOfSightsChecked = 0;
     this.data = [];
     this.sights = [];
+    this.searchedSights = [];
   }
 
   /**
@@ -83,6 +85,7 @@ export class SightsPage implements OnInit {
     loading.present().then(()=>{
       this.retrieveData().then(() => {
         this.filterSights().then(() => {
+          this.searchedSights = this.sights;
           console.log(this.sights);
           loading.dismiss();
         });
@@ -129,6 +132,16 @@ export class SightsPage implements OnInit {
       });
       resolve();
     });
+  }
+
+  getSearchedItems(event: any) {
+    this.searchedSights = this.sights;
+    let searchValue = event.target.value;
+    if (searchValue && searchValue.trim() != '') {
+      this.searchedSights = this.searchedSights.filter((sight) => {
+        return (sight.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1);
+      });
+    }
   }
 
   /**

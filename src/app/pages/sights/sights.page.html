@@ -9,8 +9,9 @@
 
 <ion-content padding>
   <h2 text-center class="page-header">Select sights</h2>
+  <ion-searchbar autocomplete="on" (ionInput)="getSearchedItems($event)"></ion-searchbar>
   <ion-list>
-    <ion-item *ngFor="let sight of sights">
+    <ion-item *ngFor="let sight of searchedSights">
       <div class="list-item">
         <div class="checkbox">
           <ion-checkbox (click)="checkSight($event, sight)"></ion-checkbox>
