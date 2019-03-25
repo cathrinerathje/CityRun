@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PopoverController, NavParams } from '@ionic/angular';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-view-info',
@@ -21,7 +22,7 @@ export class ViewInfoComponent implements OnInit {
    * Uses PopoverController to control the popover and NavParams to retrieve and display 
    * data from the clicked element.
    */
-  constructor(private popController: PopoverController, private navParams: NavParams) {
+  constructor(private popController: PopoverController, private navParams: NavParams, private iab: InAppBrowser) {
     this.sightName = navParams.get('name');
     this.originalName = navParams.get('originalName');
     this.description = navParams.get('description');
@@ -51,5 +52,9 @@ export class ViewInfoComponent implements OnInit {
   /** Dismisses the popover when the user closes it */
   close() {
     this.popController.dismiss();
+  }
+
+  readMoreOnExternalLink() {
+    window.open('https://en.wikipedia.org/wiki/' + this.originalName, '_system');
   }
 }

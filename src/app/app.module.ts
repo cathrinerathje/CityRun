@@ -15,6 +15,7 @@ import { NavProviderService } from './providers/nav/nav-provider.service';
 import { SygicPlacesService } from './providers/sygic-places/sygic-places.service';
 
 import { ViewInfoComponent } from '../app/components/view-info/view-info.component';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Geofence } from '@ionic-native/geofence/ngx';
@@ -32,6 +33,7 @@ import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
     Geolocation,
     Geofence,
     TextToSpeech,
+    InAppBrowser,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
