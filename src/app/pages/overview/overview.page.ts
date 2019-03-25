@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NavProviderService } from '../../providers/nav/nav-provider.service';
 import { ViewInfoComponent } from 'src/app/components/view-info/view-info.component';
-import { PopoverController, NavController, AlertController } from '@ionic/angular';
+import { PopoverController, NavController, AlertController, LoadingController } from '@ionic/angular';
 import * as $ from 'jquery'; 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Subscription } from 'rxjs';
@@ -50,7 +50,7 @@ export class OverviewPage implements OnInit {
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
 
   /** Uses NavProviderService to retrieve data from previous page and PopoverController to initiate a popover */
-  constructor(public navProvider: NavProviderService, private popoverController: PopoverController, private geolocation: Geolocation, private navCtrl: NavController, public alertController: AlertController, private geofence: Geofence, private tts: TextToSpeech) { 
+  constructor(public navProvider: NavProviderService, private popoverController: PopoverController, public loadingController: LoadingController, private geolocation: Geolocation, private navCtrl: NavController, public alertController: AlertController, private geofence: Geofence, private tts: TextToSpeech) { 
     this.waypoints = [];
     this.sights = this.navProvider.get();
     geofence.initialize().then(()=>{
@@ -65,14 +65,19 @@ export class OverviewPage implements OnInit {
    * Executes functions synchronously using Promises.
    * When constructWaypoints() resolves, loadMap() and startNavigation() executes asynchronously. 
    */
-  ngOnInit() {
-    this.getCurrentPosition().then(()=>{
-      this.constructWaypoints().then(() =>{      
-        this.loadMap();
-        this.startNavigation();
+  async ngOnInit() {
+    const loading = await this.loadingController.create({});
+    loading.present().then(() => {
+      this.getCurrentPosition().then(()=>{
+        this.constructWaypoints().then(() =>{      
+          this.loadMap();
+          this.startNavigation();
+          loading.dismiss();
+        });
       });
     });
   }
+  
   /**
    * @todo
    */

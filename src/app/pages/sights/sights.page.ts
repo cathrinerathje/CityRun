@@ -90,7 +90,7 @@ export class SightsPage implements OnInit {
           loading.dismiss();
         });
       });
-    })
+    });
   }
 
   /** Uses the googlePlaces service to fetch two pages of data. Then uses Promise.all() to wait
